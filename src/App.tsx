@@ -529,50 +529,47 @@ export default function App() {
           </div>
 
           {/* Bento Widget 2: Savings Overview (col-span-5) */}
-          <div 
-            className="md:col-span-12 lg:col-span-5 text-white rounded-2xl p-6 shadow-md flex flex-col justify-between min-h-[350px]"
-            style={{ backgroundColor: "#005b96" }}
-          >
+          <div className="md:col-span-12 lg:col-span-5 bg-slate-900 text-white rounded-2xl p-6 shadow-md flex flex-col justify-between min-h-[350px]">
             <div>
               <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-white/10 rounded-xl text-blue-100 border border-white/20 w-fit">
-                  <CheckCircle className="h-5 w-5 text-emerald-300" />
+                <div className="p-2 bg-emerald-500/10 rounded-xl text-emerald-400 border border-emerald-500/20 w-fit">
+                  <CheckCircle className="h-5 w-5" />
                 </div>
                 <div>
                   <h3 className="font-bold text-sm tracking-tight">Savings Overview (MTD)</h3>
-                  <span className="text-[10px] text-blue-100 uppercase tracking-wider font-bold">Dynamic Revenue Salvaged</span>
+                  <span className="text-[10px] text-slate-400 uppercase tracking-wider font-bold">Dynamic Revenue Salvaged</span>
                 </div>
               </div>
 
               <div className="space-y-6">
                 <div>
-                  <span className="text-blue-100 text-xs font-semibold uppercase tracking-wider">Estimated Salvaged value</span>
-                  <div className="text-4xl font-black text-white tracking-tight mt-1 flex items-baseline gap-1.5 font-sans">
+                  <span className="text-slate-400 text-xs font-semibold uppercase tracking-wider">Estimated Salvaged value</span>
+                  <div className="text-4xl font-black text-slate-50 tracking-tight mt-1 flex items-baseline gap-1.5 font-sans">
                     {formatPrice(totalSalvagedValue)}
-                    <span className="text-xs text-emerald-300 font-extrabold bg-white/10 px-2 py-0.5 rounded-full border border-white/20">
+                    <span className="text-xs text-emerald-400 font-extrabold bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
                       +14.2% MTD
                     </span>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4 pt-2">
-                  <div className="bg-white/10 p-3.5 rounded-xl border border-white/20">
-                    <span className="text-blue-100 text-[10px] font-bold uppercase tracking-wider block">Meals Delivered</span>
-                    <span className="text-lg font-extrabold text-white block mt-0.5">{estimatedMealsProvided}</span>
-                    <span className="text-[9px] text-emerald-300 font-semibold block mt-0.5">Donated to Food Banks</span>
+                  <div className="bg-slate-800/50 p-3.5 rounded-xl border border-slate-800">
+                    <span className="text-slate-400 text-[10px] font-bold uppercase tracking-wider block">Meals Delivered</span>
+                    <span className="text-lg font-extrabold text-slate-50 block mt-0.5">{estimatedMealsProvided}</span>
+                    <span className="text-[9px] text-emerald-400 font-semibold block mt-0.5">Donated to Food Banks</span>
                   </div>
-                  <div className="bg-white/10 p-3.5 rounded-xl border border-white/20">
-                    <span className="text-blue-100 text-[10px] font-bold uppercase tracking-wider block">Deli Repurposed</span>
-                    <span className="text-lg font-extrabold text-white block mt-0.5">{totalRepurposedQty} <span className="text-xs text-blue-200 font-medium">units</span></span>
-                    <span className="text-[9px] text-blue-200 font-semibold block mt-0.5">Transferred to Deli Menu</span>
+                  <div className="bg-slate-800/50 p-3.5 rounded-xl border border-slate-800">
+                    <span className="text-slate-400 text-[10px] font-bold uppercase tracking-wider block">Deli Repurposed</span>
+                    <span className="text-lg font-extrabold text-slate-50 block mt-0.5">{totalRepurposedQty} <span className="text-xs text-slate-400 font-medium">units</span></span>
+                    <span className="text-[9px] text-indigo-400 font-semibold block mt-0.5">Transferred to Deli Menu</span>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="mt-6 pt-3 border-t border-white/15 text-[11px] text-blue-100 font-medium flex justify-between items-center">
+            <div className="mt-6 pt-3 border-t border-slate-800 text-[11px] text-slate-400 font-medium flex justify-between items-center">
               <span>Carbon mitigation offsets active</span>
-              <span className="text-emerald-300 font-bold flex items-center gap-1">
+              <span className="text-emerald-400 font-bold flex items-center gap-1">
                 ● LIVE ACCURATE
               </span>
             </div>
