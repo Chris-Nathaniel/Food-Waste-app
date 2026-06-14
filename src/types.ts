@@ -46,4 +46,15 @@ export interface PricingRecommendation {
     description: string;
     deliUpsellTitle: string;
   };
+  isFallback?: boolean;
+  fallbackReason?: string;
 }
+
+export const categoryLabels: Record<string, string> = {
+  "Produce": "Sayuran & Buah",
+  "Meat & Seafood": "Daging & Makanan Laut",
+  "Dairy": "Susu & Olahannya",
+  "Bakery": "Roti & Kue",
+  "Pantry": "Sembako",
+  "Deli": "Deli & Dapur"
+};

@@ -42,26 +42,26 @@ export default function AddProductModal({ isOpen, onClose, onAdd }: AddProductMo
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) {
-      setErrorMsg("Product Name is required.");
+      setErrorMsg("Nama produk wajib diisi.");
       return;
     }
     if (!expirationDate) {
-      setErrorMsg("Expiration Date is required.");
+      setErrorMsg("Tanggal kedaluwarsa wajib dipilih.");
       return;
     }
     const parsedUnitPrice = parseFloat(unitPrice);
     const parsedCostPrice = parseFloat(costPrice);
 
     if (isNaN(parsedUnitPrice) || parsedUnitPrice <= 0) {
-      setErrorMsg("Retail price must be a valid number greater than 0.");
+      setErrorMsg("Harga jual eceran harus berupa angka lebih besar dari 0.");
       return;
     }
     if (isNaN(parsedCostPrice) || parsedCostPrice < 0) {
-      setErrorMsg("Wholesale purchase cost must be a valid non-negative number.");
+      setErrorMsg("Harga beli grosir harus berupa angka non-negatif.");
       return;
     }
     if (parsedCostPrice > parsedUnitPrice) {
-      setErrorMsg("Wholesale cost exceeds retail price. Double-check margins.");
+      setErrorMsg("Harga modal melebihi harga jual. Harap periksa kembali margin profit.");
       return;
     }
 
@@ -74,7 +74,7 @@ export default function AddProductModal({ isOpen, onClose, onAdd }: AddProductMo
       unitPrice: parsedUnitPrice,
       costPrice: parsedCostPrice,
       expirationDate,
-      comment: comment.trim() || "Initial merchandise intake.",
+      comment: comment.trim() || "Penerimaan stok merchandising awal.",
     });
 
     // Reset inputs
@@ -108,7 +108,7 @@ export default function AddProductModal({ isOpen, onClose, onAdd }: AddProductMo
           {/* Header */}
           <div className="relative bg-emerald-700 p-5 text-white flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <h3 className="font-sans font-bold text-lg">Intake New Merchandise</h3>
+              <h3 className="font-sans font-bold text-lg">Manifes Penerimaan Stok Baru</h3>
             </div>
             <button
               onClick={onClose}
@@ -125,7 +125,7 @@ export default function AddProductModal({ isOpen, onClose, onAdd }: AddProductMo
               <div className="rounded-xl bg-rose-50 border border-rose-100 p-3.5 flex gap-2.5 items-start text-xs text-rose-800">
                 <AlertCircle className="h-4.5 w-4.5 flex-shrink-0 text-rose-500 mt-0.5" />
                 <div className="space-y-0.5">
-                  <p className="font-bold">Form Validation Warning</p>
+                  <p className="font-bold">Peringatan Validasi Formulir</p>
                   <p className="text-slate-600 leading-normal">{errorMsg}</p>
                 </div>
               </div>
@@ -133,13 +133,13 @@ export default function AddProductModal({ isOpen, onClose, onAdd }: AddProductMo
 
             {/* Product Name */}
             <div className="space-y-1">
-              <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Product Name *</label>
+              <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Nama Produk *</label>
               <input
                 type="text"
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="e.g. Premium Angus Beef Mince 500g"
+                placeholder="Contoh: Daging Sapi Giling Premium 500g"
                 className="w-full rounded-xl border border-slate-200 px-3 py-2.5 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
               />
             </div>
@@ -147,13 +147,13 @@ export default function AddProductModal({ isOpen, onClose, onAdd }: AddProductMo
             {/* Catalog Numbers & Automatic SKU generation */}
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1">
-                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">SKU Code</label>
+                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">Kode SKU</label>
                 <div className="flex gap-2">
                   <input
                     type="text"
                     value={sku}
                     onChange={(e) => setSku(e.target.value)}
-                    placeholder="e.g. MEAT-8812"
+                    placeholder="Contoh: MEAT-8812"
                     className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 font-mono text-[11px] uppercase"
                   />
                   <button
@@ -167,24 +167,34 @@ export default function AddProductModal({ isOpen, onClose, onAdd }: AddProductMo
               </div>
 
               <div className="space-y-1">
-                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">Category</label>
+                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">Kategori / Departemen</label>
                 <select
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
                   className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 bg-white"
                 >
-                  {CATEGORIES.map((cat) => (
-                    <option key={cat} value={cat}>
-                      {cat}
-                    </option>
-                  ))}
+                  {CATEGORIES.map((cat) => {
+                    const categoryLabels: Record<string, string> = {
+                      "Produce": "Sayuran & Buah",
+                      "Meat & Seafood": "Daging & Makanan Laut",
+                      "Dairy": "Susu & Olahannya",
+                      "Bakery": "Roti & Kue",
+                      "Pantry": "Sembako",
+                      "Deli": "Deli & Dapur"
+                    };
+                    return (
+                      <option key={cat} value={cat}>
+                        {categoryLabels[cat] || cat}
+                      </option>
+                    );
+                  })}
                 </select>
               </div>
             </div>
 
             {/* Expiry Date */}
             <div className="space-y-1">
-              <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">Expiration Date *</label>
+              <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">Tanggal Kedaluwarsa *</label>
               <input
                 type="date"
                 required
@@ -197,7 +207,7 @@ export default function AddProductModal({ isOpen, onClose, onAdd }: AddProductMo
             {/* Inventory Quantity vs Unit */}
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1">
-                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">On Hand Quantity</label>
+                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">Jumlah Stok Penerimaan</label>
                 <input
                   type="number"
                   min="1"
@@ -210,7 +220,7 @@ export default function AddProductModal({ isOpen, onClose, onAdd }: AddProductMo
               </div>
 
               <div className="space-y-1">
-                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">Unit Type</label>
+                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">Tipe Satuan</label>
                 <select
                   value={unit}
                   onChange={(e) => setUnit(e.target.value)}
@@ -228,7 +238,7 @@ export default function AddProductModal({ isOpen, onClose, onAdd }: AddProductMo
             {/* Wholesaler Cost vs Retail Price */}
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1">
-                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">Wholesale Cost *</label>
+                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">Harga Beli Grosir (Modal) *</label>
                 <input
                   type="number"
                   step="any"
@@ -236,13 +246,13 @@ export default function AddProductModal({ isOpen, onClose, onAdd }: AddProductMo
                   required
                   value={costPrice}
                   onChange={(e) => setCostPrice(e.target.value)}
-                  placeholder="e.g. 21000 or 2.50"
+                  placeholder="Contoh: 21000"
                   className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">Retail Price *</label>
+                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">Harga Jual Eceran *</label>
                 <input
                   type="number"
                   step="any"
@@ -250,7 +260,7 @@ export default function AddProductModal({ isOpen, onClose, onAdd }: AddProductMo
                   required
                   value={unitPrice}
                   onChange={(e) => setUnitPrice(e.target.value)}
-                  placeholder="e.g. 28000 or 5.99"
+                  placeholder="Contoh: 28000"
                   className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
                 />
               </div>
@@ -258,11 +268,11 @@ export default function AddProductModal({ isOpen, onClose, onAdd }: AddProductMo
 
             {/* Reception notes */}
             <div className="space-y-1">
-              <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">Reception Checklist Notes</label>
+              <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">Catatan Penerimaan (Kualitas/Palet)</label>
               <textarea
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
-                placeholder="Details about quality testing at intake or pallet notes..."
+                placeholder="Tulis detail mengenai pengujian kualitas saat serah terima, kondisi suhu, atau catatan nomor palet..."
                 className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 h-20 resize-none"
               />
             </div>
@@ -275,13 +285,13 @@ export default function AddProductModal({ isOpen, onClose, onAdd }: AddProductMo
               onClick={onClose}
               className="text-xs font-bold text-slate-500 px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors cursor-pointer"
             >
-              Cancel
+              Batal
             </button>
             <button
               onClick={handleFormSubmit}
               className="inline-flex items-center gap-1.5 text-xs font-bold text-white px-5 py-2.5 bg-emerald-700 hover:bg-emerald-800 rounded-xl shadow-md transition-colors cursor-pointer"
             >
-              <Save className="h-4 w-4" /> Save to Inventory
+              <Save className="h-4 w-4" /> Simpan ke Inventaris
             </button>
           </div>
         </motion.div>

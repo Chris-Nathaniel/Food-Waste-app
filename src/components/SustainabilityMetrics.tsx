@@ -88,9 +88,9 @@ export default function SustainabilityMetrics({ logs }: SustainabilityMetricsPro
         <div className="space-y-1.5">
           <div className="flex items-center gap-2 text-indigo-700">
             <Leaf className="h-5 w-5 text-emerald-600" />
-            <h4 className="font-extrabold text-sm uppercase tracking-wide">Recycled Diversion Efficiency</h4>
+            <h4 className="font-extrabold text-sm uppercase tracking-wide">Efisiensi Pengalihan Sampah</h4>
           </div>
-          <p className="text-xs text-slate-500">Supermarket merchandise volume kept out of standard landfills.</p>
+          <p className="text-xs text-slate-500">Volume produk swalayan yang berhasil diselamatkan dari TPA sampah standar.</p>
         </div>
 
         <div className="my-6 flex items-center justify-center relative">
@@ -119,23 +119,23 @@ export default function SustainabilityMetrics({ logs }: SustainabilityMetricsPro
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
               <span className="text-3xl font-extrabold tracking-tight text-slate-900">{diversionRate.toFixed(0)}%</span>
-              <span className="text-[10px] font-bold text-slate-400 uppercase">Diverted Done</span>
+              <span className="text-[10px] font-bold text-slate-400 uppercase">Teralihkan</span>
             </div>
           </div>
         </div>
 
         <div className="grid grid-cols-3 gap-2 text-center text-xs mt-2 border-t border-slate-50 pt-3">
           <div className="bg-emerald-50 rounded-lg p-1.5 border border-emerald-100/50">
-            <span className="text-[9px] font-bold text-emerald-700 block uppercase">Donated</span>
-            <span className="font-mono font-bold text-emerald-900">{stats.donatedQuantity} pcs</span>
+            <span className="text-[9px] font-bold text-emerald-700 block uppercase">Donasi</span>
+            <span className="font-mono font-bold text-emerald-900">{stats.donatedQuantity} unit</span>
           </div>
           <div className="bg-indigo-50 rounded-lg p-1.5 border border-indigo-100/50">
-            <span className="text-[9px] font-bold text-indigo-700 block uppercase">Deli Cook</span>
-            <span className="font-mono font-bold text-indigo-900">{stats.repurposedQuantity} pcs</span>
+            <span className="text-[9px] font-bold text-indigo-700 block uppercase">Dapur Deli</span>
+            <span className="font-mono font-bold text-indigo-900">{stats.repurposedQuantity} unit</span>
           </div>
           <div className="bg-teal-50 rounded-lg p-1.5 border border-teal-100/50">
-            <span className="text-[9px] font-bold text-teal-700 block uppercase">Compost</span>
-            <span className="font-mono font-bold text-teal-900">{stats.compostedQuantity} pcs</span>
+            <span className="text-[9px] font-bold text-teal-700 block uppercase">Kompos</span>
+            <span className="font-mono font-bold text-teal-900">{stats.compostedQuantity} unit</span>
           </div>
         </div>
       </motion.div>
@@ -151,16 +151,16 @@ export default function SustainabilityMetrics({ logs }: SustainabilityMetricsPro
         <div className="space-y-1.5">
           <div className="flex items-center gap-2 text-emerald-700">
             <ShieldCheck className="h-5 w-5" />
-            <h4 className="font-extrabold text-sm uppercase tracking-wide">Ecological Offset Metrics</h4>
+            <h4 className="font-extrabold text-sm uppercase tracking-wide">Metrik Kompensasi Ekologis</h4>
           </div>
-          <p className="text-xs text-slate-500">Estimates of greenhouse gases mitigated through zero-waste actions.</p>
+          <p className="text-xs text-slate-500">Estimasi gas rumah kaca yang diredam melalui aksi zero-waste.</p>
         </div>
 
         <div className="space-y-3 pt-2">
           {/* Carbon avoided bar indicator */}
           <div className="space-y-1">
             <div className="flex justify-between items-center text-xs font-semibold text-slate-600">
-              <span>Carbon Prevented:</span>
+              <span>Mencegah Emisi Karbon:</span>
               <span className="font-mono text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded font-bold">
                 {stats.co2Prevented.toFixed(1)} kg CO₂e
               </span>
@@ -184,14 +184,14 @@ export default function SustainabilityMetrics({ logs }: SustainabilityMetricsPro
             <div className="border border-slate-100 p-3 rounded-xl bg-slate-50/50 space-y-1">
               <Leaf className="h-4 w-4 text-emerald-500" />
               <div className="font-sans text-lg font-extrabold text-slate-800">{treesPlantedEquivalent}</div>
-              <p className="text-[10px] text-slate-500 font-medium leading-tight">Equivalent tree seedlings grown for 10 years</p>
+              <p className="text-[10px] text-slate-500 font-medium leading-tight">Setara bibit pohon tumbuh subur selama 10 tahun</p>
             </div>
 
             {/* Meals feeding card */}
             <div className="border border-slate-100 p-3 rounded-xl bg-slate-50/50 space-y-1">
               <HandHeart className="h-4 w-4 text-rose-500 animate-pulse" />
               <div className="font-sans text-lg font-extrabold text-slate-800">{totalMealsFed}</div>
-              <p className="text-[10px] text-slate-500 font-medium leading-tight">Emergency charity meals provided to food insecure folks</p>
+              <p className="text-[10px] text-slate-500 font-medium leading-tight">Bantuan porsi makanan darurat yang disalurkan</p>
             </div>
           </div>
         </div>
@@ -208,9 +208,9 @@ export default function SustainabilityMetrics({ logs }: SustainabilityMetricsPro
         <div className="space-y-1.5">
           <div className="flex items-center gap-2 text-emerald-700">
             <DollarSign className="h-5 w-5 text-emerald-600" />
-            <h4 className="font-extrabold text-sm uppercase tracking-wide">Financial Recuperation Buffer</h4>
+            <h4 className="font-extrabold text-sm uppercase tracking-wide">Penyelamatan Finansial</h4>
           </div>
-          <p className="text-xs text-slate-500">Value salvaged via markdown, donation offsets, and deli reuse.</p>
+          <p className="text-xs text-slate-500">Nilai yang diselamatkan via diskon, donasi, dan dapur deli.</p>
         </div>
 
         <div className="space-y-3.5 my-4">
@@ -219,7 +219,7 @@ export default function SustainabilityMetrics({ logs }: SustainabilityMetricsPro
               <DollarSign className="h-5 w-5" />
             </div>
             <div>
-              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Write-Off Cost Value</span>
+              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Kerugian Nilai Dihapus</span>
               <span className="text-xl font-extrabold text-slate-800 block">{formatPrice(stats.totalLossAmount)}</span>
             </div>
           </div>
@@ -229,7 +229,7 @@ export default function SustainabilityMetrics({ logs }: SustainabilityMetricsPro
               <DollarSign className="h-5 w-5" />
             </div>
             <div>
-              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Reclaimed Value Saved</span>
+              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Nilai Aset Diselamatkan</span>
               <span className="text-xl font-extrabold text-emerald-700 block">{formatPrice(stats.totalLossSaved)}</span>
             </div>
           </div>
@@ -237,11 +237,11 @@ export default function SustainabilityMetrics({ logs }: SustainabilityMetricsPro
 
         <div className="space-y-1 text-xs">
           <div className="flex justify-between items-center text-slate-600 font-medium">
-            <span>Salvage Asset Efficiency:</span>
+            <span>Efisiensi Penyelamatan Aset:</span>
             <span className="font-bold text-slate-800">{reclaimRatio.toFixed(1)}%</span>
           </div>
           <div className="w-full bg-slate-100 rounded-full h-1.5">
-            <div className="bg-emerald-650 h-1.5 rounded-full bg-emerald-650" style={{ width: `${reclaimRatio}%` }} />
+            <div className="bg-emerald-650 h-1.5 rounded-full bg-emerald-600" style={{ width: `${reclaimRatio}%` }} />
           </div>
         </div>
       </motion.div>

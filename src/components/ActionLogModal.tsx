@@ -29,31 +29,31 @@ export default function ActionLogModal({ product, isOpen, onClose, onLogAction }
   const actionTypes: { type: WasteActionType; label: string; icon: React.ReactNode; color: string; desc: string }[] = [
     {
       type: "Donated",
-      label: "Charity Donation",
+      label: "Donasi Amal (Food Bank)",
       icon: <HandHeart className="h-5 w-5" />,
       color: "border-emerald-200 bg-emerald-50 text-emerald-800 hover:bg-emerald-100",
-      desc: "Repackage for food banks, soup kitchens, or local volunteer recovery groups immediately.",
+      desc: "Kemas kembali untuk dikirim ke bank makanan (Food Bank), dapur umum swadaya, atau relawan pemulihan makanan.",
     },
     {
       type: "Deli Repurposed",
-      label: "Instore Kitchen Repurpose",
+      label: "Dialihkan ke Dapur Deli",
       icon: <CookingPot className="h-5 w-5" />,
       color: "border-indigo-200 bg-indigo-50 text-indigo-800 hover:bg-indigo-100",
-      desc: "Send raw produce, bread, or meats to the internal hot-food salad bar or deli station.",
+      desc: "Kirim produk segar mentah, roti, atau daging ke dapur internal bar salad atau konter deli siap saji hangat.",
     },
     {
       type: "Composted",
-      label: "Organic Composting",
+      label: "Pengomposan Organik",
       icon: <Leaf className="h-5 w-5" />,
       color: "border-teal-200 bg-teal-50 text-teal-800 hover:bg-teal-100",
-      desc: "Divert spoiled greens and organic components to municipal waste digestors or agricultural soil partners.",
+      desc: "Salurkan buah/sayuran layu dan sisa organik ke fasilitas pengolah kompos kota atau mitra pupuk pertanian.",
     },
     {
       type: "Discarded",
-      label: "Rubbish / Landfill Disposal",
+      label: "Pembuangan ke TPA",
       icon: <Trash2 className="h-5 w-5" />,
       color: "border-rose-200 bg-rose-50 text-rose-800 hover:bg-rose-100",
-      desc: "Total waste discard. Standard waste pickup; results in organic rot methane generation.",
+      desc: "Pembuangan limbah total. Penjemputan sampah standar komersial; menghasilkan gas metana di tempat pembuangan akhir.",
     },
   ];
 
@@ -71,11 +71,11 @@ export default function ActionLogModal({ product, isOpen, onClose, onLogAction }
   const handleActionSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (parsedQty <= 0) {
-      setErrorMessage("Please supply a valid quantity to log.");
+      setErrorMessage("Harap masukkan jumlah yang valid untuk dicatat.");
       return;
     }
     if (parsedQty > product.quantity) {
-      setErrorMessage(`Insufficient stock. Maximum on hand is ${product.quantity}.`);
+      setErrorMessage(`Jumlah stok tidak tersedia. Maksimal stok sisa di rak adalah ${product.quantity}.`);
       return;
     }
 
@@ -83,7 +83,7 @@ export default function ActionLogModal({ product, isOpen, onClose, onLogAction }
       product.id,
       parsedQty,
       action,
-      comment || `Manually logged ${parsedQty} units for ${action}.`,
+      comment || `Pencatatan manual ${parsedQty} unit untuk status ${action}.`,
       calculatedLossValue,
       calculatedSalvageValue
     );
@@ -91,6 +91,15 @@ export default function ActionLogModal({ product, isOpen, onClose, onLogAction }
     setComment("");
     setErrorMessage("");
     onClose();
+  };
+
+  const categoryLabels: Record<string, string> = {
+    "Produce": "Sayuran & Buah",
+    "Meat & Seafood": "Daging & Makanan Laut",
+    "Dairy": "Susu & Olahannya",
+    "Bakery": "Roti & Kue",
+    "Pantry": "Sembako",
+    "Deli": "Deli & Dapur"
   };
 
   if (!isOpen) return null;
@@ -110,8 +119,8 @@ export default function ActionLogModal({ product, isOpen, onClose, onLogAction }
           {/* Header */}
           <div className="relative bg-emerald-700 p-5 text-white flex items-center justify-between">
             <div>
-              <h3 className="font-sans font-bold text-lg leading-tight">Write-Off & Zero-Waste Action</h3>
-              <p className="text-xs text-emerald-100 font-medium">Record disposal or salvage for expiring stock</p>
+              <h3 className="font-sans font-bold text-lg leading-tight">Penghapusan Stok & Tindakan Zero-Waste</h3>
+              <p className="text-xs text-emerald-100 font-medium">Catat pembuangan atau pemulihan nilai untuk stok habis masa pajang</p>
             </div>
             <button
               onClick={onClose}
@@ -136,18 +145,18 @@ export default function ActionLogModal({ product, isOpen, onClose, onLogAction }
                 <span className="font-mono text-[9px] font-bold text-slate-400 block uppercase">{product.sku}</span>
                 <span className="font-bold text-slate-800 text-sm block">{product.name}</span>
                 <span className="text-slate-500 font-medium mt-0.5 block">
-                  Category: <strong className="text-slate-700">{product.category}</strong>
+                  Kategori: <strong className="text-slate-700">{categoryLabels[product.category] || product.category}</strong>
                 </span>
               </div>
               <div className="text-right">
-                <span className="text-slate-400 font-semibold block uppercase">STOCK ON HAND</span>
+                <span className="text-slate-400 font-semibold block uppercase">SISA DI RAK</span>
                 <span className="text-slate-800 font-extrabold text-base block">{product.quantity} {product.unit}</span>
               </div>
             </div>
 
             {/* Action options */}
             <div className="space-y-2">
-              <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">1. Select Waste Mitigation Action</label>
+              <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">1. Pilih Tindakan Pencegahan Sampah</label>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {actionTypes.map((type) => {
                   const isActive = action === type.type;
@@ -180,7 +189,7 @@ export default function ActionLogModal({ product, isOpen, onClose, onLogAction }
             {/* Quantity Selector */}
             <div className="grid grid-cols-2 gap-4 items-end">
               <div className="space-y-1">
-                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">2. Quantity to Process</label>
+                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">2. Jumlah yang Diproses</label>
                 <div className="relative">
                   <input
                     type="number"
@@ -203,44 +212,44 @@ export default function ActionLogModal({ product, isOpen, onClose, onLogAction }
                 onClick={() => setQuantity(product.quantity.toString())}
                 className="text-xs text-slate-600 font-bold bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 hover:bg-slate-100 transition-colors cursor-pointer text-center h-[38px] flex items-center justify-center"
               >
-                Log Full Batch ({product.quantity})
+                Catat Semua ({product.quantity})
               </button>
             </div>
 
             {/* Calculations & Salvage Margin summary */}
             <div className="bg-slate-50 rounded-2xl p-4 border border-slate-150 text-xs text-slate-600 space-y-2.5">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Financial Impact Projection</span>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Proyeksi Dampak Keuangan</span>
               
               <div className="flex justify-between items-center text-slate-700">
-                <span>Wholesale cost lost (Written-off value):</span>
+                <span>Kerugian harga beli (Nilai dihapus):</span>
                 <span className="font-mono font-bold text-rose-600">{formatPrice(calculatedLossValue)}</span>
               </div>
               
               <div className="flex justify-between items-center text-slate-700 border-t border-dashed border-slate-200 pt-2.5">
-                <span>Recycled/Repurpose economic value:</span>
+                <span>Ekonomi sisa yang dipulihkan:</span>
                 <span className="font-mono font-bold text-emerald-600">{formatPrice(calculatedSalvageValue)}</span>
               </div>
 
               {action === "Donated" && (
                 <div className="bg-emerald-50 rounded-xl p-2.5 text-[11px] text-emerald-800 border border-emerald-100/30 font-medium">
-                  💚 Valuing this donation feeds approximately <strong>{(parsedQty * 1.5).toFixed(0)} meals</strong> to food insecure families locally. Works as a tax write-off.
+                  💚 Nilai donasi ini menyediakan sekitar <strong>{(parsedQty * 1.5).toFixed(0)} porsi makanan</strong> untuk keluarga yang membutuhkan secara lokal. Berfungsi sebagai tax write-off.
                 </div>
               )}
               {action === "Deli Repurposed" && (
                 <div className="bg-indigo-50 rounded-xl p-2.5 text-[11px] text-indigo-800 border border-indigo-100/30 font-medium">
-                  🍳 Materials transfer. Deli kitchen repurposing minimizes purchasing cost, turning raw surplus immediately into hot self-serve deli recipes.
+                  🍳 Pengalihan bahan dapur meminimalkan kerugian biaya beli, mengubah stok berlebih mentah langsung menjadi menu siap saji hangat di konter deli.
                 </div>
               )}
             </div>
 
             {/* Comments log */}
             <div className="space-y-1">
-              <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">3. Log Comments & Actions taken</label>
+              <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">3. Catatan Komentar & Tindakan yang Diambil</label>
               <textarea
                 value={comment}
                 required
                 onChange={(e) => setComment(e.target.value)}
-                placeholder="e.g. Frozen steak remaining from Tuesday; transferred directly to deli sandwich station for roasted steak rolls."
+                placeholder="Contoh: Sisa steak beku dari hari Selasa; dialihkan langsung ke stasiun deli untuk sajian roti daging panggang hangat."
                 className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none h-20 resize-none"
               />
             </div>
@@ -253,13 +262,13 @@ export default function ActionLogModal({ product, isOpen, onClose, onLogAction }
               onClick={onClose}
               className="text-xs font-bold text-slate-500 px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors cursor-pointer"
             >
-              Cancel
+              Batal
             </button>
             <button
               onClick={handleActionSubmit}
               className="inline-flex items-center gap-1.5 text-xs font-bold text-white px-5 py-2.5 bg-emerald-700 hover:bg-emerald-800 rounded-xl shadow-md transition-colors cursor-pointer"
             >
-              Submit Waste Log Action <ArrowRight className="h-4 w-4" />
+              Kirim Catatan Tindakan <ArrowRight className="h-4 w-4" />
             </button>
           </div>
         </motion.div>

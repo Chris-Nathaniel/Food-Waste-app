@@ -106,15 +106,15 @@ export default function App() {
       });
 
       if (!response.ok) {
-        throw new Error("Could not add item to inventory storage.");
+        throw new Error("Gagal memasukkan produk ke penyimpanan inventaris.");
       }
 
       const createdItem = await response.json();
       setInventory((prev) => [createdItem, ...prev]);
-      showNotification(`Successfully stocked ${createdItem.name} in the system!`);
+      showNotification(`Berhasil menambahkan ${createdItem.name} ke dalam sistem!`);
     } catch (err) {
       console.error(err);
-      alert("Error adding item to catalog.");
+      alert("Terjadi kesalahan saat menambahkan produk ke katalog.");
     }
   };
 
@@ -133,15 +133,15 @@ export default function App() {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to record markdown update on server.");
+        throw new Error("Gagal merekam data markdown di server.");
       }
 
       const updated = await response.json();
       setInventory((prev) => prev.map((item) => (item.id === productId ? updated : item)));
-      showNotification(`Enforced a ${discountPct}% markdown for ${updated.name}! Price is now ${formatPrice(newPrice)}.`);
+      showNotification(`Berhasil menetapkan diskon ${discountPct}% untuk ${updated.name}! Harga kini menjadi ${formatPrice(newPrice)}.`);
     } catch (err) {
       console.error(err);
-      alert("Error executing markdown adjustment.");
+      alert("Gagal melakukan aksi penyesuaian markdown.");
     }
   };
 
@@ -169,7 +169,7 @@ export default function App() {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to record waste act.");
+        throw new Error("Gagal mencatat data aksi limbah.");
       }
 
       const logged = await response.json();
@@ -195,10 +195,11 @@ export default function App() {
           .filter((item) => item.quantity > 0) // filters out fully zeroed stock from primary active view to keep list crisp
       );
 
-      showNotification(`Waste event recorded: ${action} ${quantity} units. Offset registered!`, "info");
+      const actionTextIndo = action === "Donated" ? "Donasi" : (action === "Deli Repurposed" ? "Deli Dapur" : (action === "Composted" ? "Kompos" : "Dibuang"));
+      showNotification(`Aksi limbah disimpan: ${actionTextIndo} ${quantity} unit berhasil dicatat!`, "info");
     } catch (err) {
       console.error(err);
-      alert("Error submitting mitigation log.");
+      alert("Gagal mengirimkan log mitigasi limbah.");
     }
   };
 
@@ -222,12 +223,12 @@ export default function App() {
           quantity: remainingQty,
           status: remainingQty <= 0 ? "Sold" : item.status,
           actionTaken: "Sold",
-          actionComment: `Simulated checkout purchase: sold ${sellQty} ${item.unit} at ${formatPrice(price)} each.`
+          actionComment: `Simulasi transaksi kasir: terjual ${sellQty} ${item.unit} seharga ${formatPrice(price)} per unit.`
         })
       });
 
       if (!response.ok) {
-        throw new Error("Checkout transaction failed.");
+        throw new Error("Transaksi checkout gagal.");
       }
 
       const updated = await response.json();
@@ -238,10 +239,10 @@ export default function App() {
       );
 
       const salesCapital = sellQty * price;
-      showNotification(`Simulated customer checkout: Sold ${sellQty} ${item.unit} for ${formatPrice(salesCapital)}!`);
+      showNotification(`Simulasi kasir belanja: Terjual ${sellQty} ${item.unit} seharga ${formatPrice(salesCapital)}!`);
     } catch (err) {
       console.error(err);
-      alert("Error completing sale simulator transaction.");
+      alert("Gagal memproses transaksi simulasi penjualan.");
     }
   };
 
@@ -340,13 +341,13 @@ export default function App() {
       {/* Top Banner alert notifying user of active fullstack session */}
       <div className="bg-emerald-950 text-emerald-100 px-4 py-2 text-center text-xs font-semibold flex items-center justify-center gap-3 border-b border-emerald-900 shadow-inner">
         <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-        <span>Connected to live full-stack Express & Gemini Pricing Optimization Services</span>
+        <span>Terhubung langsung dengan Layanan Express & Optimasi Harga Gemini</span>
         <button
           onClick={fetchData}
           className="hover:underline flex items-center gap-1 text-[11px] bg-emerald-900 px-2 py-0.5 rounded-md border border-emerald-800"
-          title="Refresh connection"
+          title="Sinkronkan data"
         >
-          <RefreshCw className="h-3 w-3" /> Sync Tickers
+          <RefreshCw className="h-3 w-3" /> Sinkronkan data
         </button>
       </div>
 
@@ -358,10 +359,10 @@ export default function App() {
           </div>
           <div>
             <h1 className="text-xl font-extrabold tracking-tight text-slate-900 font-sans">
-              ZeroWaste <span className="text-emerald-600">Merchandiser</span>
+              GaragaraUwuhRungkad <span className="text-emerald-605 text-emerald-650 text-emerald-600">UwuAja</span>
             </h1>
             <p className="text-xs text-slate-500 font-medium mt-0.5">
-              <span>Central Inventory & Markdown Control</span>
+              <span>SelamatkanSebelumMenjadiUwuh</span>
             </p>
           </div>
         </div>
@@ -371,15 +372,15 @@ export default function App() {
           <div className="hidden sm:flex bg-slate-50 px-4 py-2 rounded-xl border border-slate-200/85 shadow-sm text-left gap-2 items-center">
             <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
             <div>
-              <span className="text-[10px] font-bold uppercase text-slate-400 block tracking-wider leading-none">Market Operator</span>
-              <span className="text-xs font-bold text-slate-700">Chris Nathaniel (#L7-CHICAGO)</span>
+              <span className="text-[10px] font-bold uppercase text-slate-400 block tracking-wider leading-none">Operator Pasar</span>
+              <span className="text-xs font-bold text-slate-700">Chris Nathaniel (#Jakarta)</span>
             </div>
           </div>
 
           <div className="hidden md:flex bg-slate-50 px-4 py-2 rounded-xl border border-slate-200/85 shadow-sm text-left gap-2 items-center">
             <Clock className="h-4 w-4 text-emerald-600" />
             <div>
-              <span className="text-[10px] font-bold uppercase text-slate-400 block tracking-wider leading-none">System Clock</span>
+              <span className="text-[10px] font-bold uppercase text-slate-400 block tracking-wider leading-none">Jam Sistem</span>
               <span className="text-xs font-mono font-bold text-slate-700">{currentTime.toLocaleTimeString()}</span>
             </div>
           </div>
@@ -388,7 +389,7 @@ export default function App() {
             onClick={() => setIsAddOpen(true)}
             className="inline-flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold px-4.5 py-2.5 rounded-xl text-xs shadow-md transition-all cursor-pointer font-sans"
           >
-            <PlusCircle className="h-4 w-4" /> Intake New Stock
+            <PlusCircle className="h-4 w-4" /> Masukkan Stok Baru
           </button>
 
           <div className="h-10 w-10 bg-slate-900 rounded-full flex items-center justify-center text-white font-extrabold shadow-sm text-xs border border-slate-800" title="chris.nathaniel29@gmail.com">
@@ -404,13 +405,13 @@ export default function App() {
           <div className="bg-rose-50 border border-rose-100 rounded-2xl p-4 text-xs text-rose-800 flex gap-2.5 items-start">
             <AlertOctagon className="h-5 w-5 text-rose-500 mt-0.5 flex-shrink-0" />
             <div>
-              <p className="font-bold">Database Synchronizer Error</p>
+              <p className="font-bold">Kesalahan Sinkronisasi Database</p>
               <p className="text-slate-600 mt-0.5">{errorMsg}</p>
               <button
                 onClick={fetchData}
                 className="mt-2 inline-flex items-center gap-1 bg-white border border-rose-200 text-[10px] font-bold py-1 px-2.5 rounded-lg text-rose-700 hover:bg-rose-50 shadow-sm cursor-pointer"
               >
-                Retry Database Query
+                Ulangi Kueri Database
               </button>
             </div>
           </div>
@@ -448,10 +449,10 @@ export default function App() {
               <div className="flex justify-between items-center mb-4">
                 <div className="flex items-center gap-2">
                   <span className="p-1 bg-amber-50 rounded-lg text-amber-600">⚠️</span>
-                  <h3 className="font-bold text-slate-800 text-sm">Priority Markdown Board</h3>
+                  <h3 className="font-bold text-slate-800 text-sm">Papan Markdown Prioritas</h3>
                 </div>
                 <span className="text-[10px] font-mono bg-rose-50 text-rose-700 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">
-                  Action Required
+                  Butuh Tindakan
                 </span>
               </div>
               
@@ -459,18 +460,18 @@ export default function App() {
                 <table className="w-full text-left text-xs border-collapse">
                   <thead>
                     <tr className="border-b border-slate-100 text-slate-400 font-bold">
-                      <th className="py-2">Item</th>
+                      <th className="py-2">Produk</th>
                       <th className="py-2">SKU</th>
-                      <th className="py-2 text-center">Expires</th>
-                      <th className="py-2 text-right">Stock</th>
-                      <th className="py-2 text-right">Optimize Action</th>
+                      <th className="py-2 text-center">Kedaluwarsa</th>
+                      <th className="py-2 text-right">Stok</th>
+                      <th className="py-2 text-right">Aksi Optimasi</th>
                     </tr>
                   </thead>
                   <tbody>
                     {priorityProducts.length === 0 ? (
                       <tr>
                         <td colSpan={5} className="py-8 text-center text-slate-400 font-medium font-sans">
-                          No active stock batches require urgent markdown. All shelf indexes are stable.
+                          Tidak ada stok aktif yang memerlukan diskon darurat. Semua indeks rak stabil.
                         </td>
                       </tr>
                     ) : (
@@ -489,15 +490,15 @@ export default function App() {
                             <td className="py-3 text-center">
                               {isExpired ? (
                                 <span className="font-bold text-rose-650 bg-rose-50 border border-rose-100 px-2 py-0.5 rounded text-[10px]">
-                                  Expired
+                                  Kedaluwarsa
                                 </span>
                               ) : isExpiringSoon ? (
                                 <span className="font-bold text-amber-700 bg-amber-50 border border-amber-100 px-2 py-0.5 rounded text-[10px]">
-                                  {days === 0 ? "Today" : days === 1 ? "1d left" : "2d left"}
+                                  {days === 0 ? "Hari Ini" : days === 1 ? "Sisa 1 hari" : "Sisa 2 hari"}
                                 </span>
                               ) : (
                                 <span className="font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded text-[10px]">
-                                  {days}d left
+                                  {days} hari lagi
                                 </span>
                               )}
                             </td>
@@ -509,7 +510,7 @@ export default function App() {
                                 onClick={() => setSelectedRecommendProduct(p)}
                                 className="bg-emerald-50 hover:bg-emerald-600 text-emerald-800 hover:text-white px-2.5 py-1 rounded-lg border border-emerald-100 font-extrabold hover:shadow-sm text-[10px] cursor-pointer transition-all"
                               >
-                                Gemini Suggest
+                                Saran Gemini
                               </button>
                             </td>
                           </tr>
@@ -522,9 +523,9 @@ export default function App() {
             </div>
             
             <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-slate-400 text-[11px] font-medium leading-none">
-              <span>Primary shelf prioritizations synced from central inventory storage</span>
+              <span>Prioritas rak disinkronkan dari penyimpanan inventaris pusat</span>
               <span className="text-slate-300">•</span>
-              <span className="text-slate-500 font-extrabold">Active SKU List: {totalMonitoredSKUs}</span>
+              <span className="text-slate-500 font-extrabold">Daftar SKU Aktif: {totalMonitoredSKUs}</span>
             </div>
           </div>
 
@@ -536,14 +537,14 @@ export default function App() {
                   <CheckCircle className="h-5 w-5" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-sm tracking-tight">Savings Overview (MTD)</h3>
-                  <span className="text-[10px] text-slate-400 uppercase tracking-wider font-bold">Dynamic Revenue Salvaged</span>
+                  <h3 className="font-bold text-sm tracking-tight">Ringkasan Penghematan (MTD)</h3>
+                  <span className="text-[10px] text-slate-400 uppercase tracking-wider font-bold">Pendapatan Terselamatkan</span>
                 </div>
               </div>
 
               <div className="space-y-6">
                 <div>
-                  <span className="text-slate-400 text-xs font-semibold uppercase tracking-wider">Estimated Salvaged value</span>
+                  <span className="text-slate-400 text-xs font-semibold uppercase tracking-wider">Estimasi Nilai Diselamatkan</span>
                   <div className="text-4xl font-black text-slate-50 tracking-tight mt-1 flex items-baseline gap-1.5 font-sans">
                     {formatPrice(totalSalvagedValue)}
                     <span className="text-xs text-emerald-400 font-extrabold bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
@@ -554,23 +555,23 @@ export default function App() {
 
                 <div className="grid grid-cols-2 gap-4 pt-2">
                   <div className="bg-slate-800/50 p-3.5 rounded-xl border border-slate-800">
-                    <span className="text-slate-400 text-[10px] font-bold uppercase tracking-wider block">Meals Delivered</span>
+                    <span className="text-slate-400 text-[10px] font-bold uppercase tracking-wider block">Porsi Pangan Disalurkan</span>
                     <span className="text-lg font-extrabold text-slate-50 block mt-0.5">{estimatedMealsProvided}</span>
-                    <span className="text-[9px] text-emerald-400 font-semibold block mt-0.5">Donated to Food Banks</span>
+                    <span className="text-[9px] text-emerald-400 font-semibold block mt-0.5">Didonasikan ke Food Bank</span>
                   </div>
                   <div className="bg-slate-800/50 p-3.5 rounded-xl border border-slate-800">
-                    <span className="text-slate-400 text-[10px] font-bold uppercase tracking-wider block">Deli Repurposed</span>
-                    <span className="text-lg font-extrabold text-slate-50 block mt-0.5">{totalRepurposedQty} <span className="text-xs text-slate-400 font-medium">units</span></span>
-                    <span className="text-[9px] text-indigo-400 font-semibold block mt-0.5">Transferred to Deli Menu</span>
+                    <span className="text-slate-400 text-[10px] font-bold uppercase tracking-wider block">Olah Dapur Deli</span>
+                    <span className="text-lg font-extrabold text-slate-50 block mt-0.5">{totalRepurposedQty} <span className="text-xs text-slate-400 font-medium">unit</span></span>
+                    <span className="text-[9px] text-indigo-400 font-semibold block mt-0.5">Dialihkan ke Menu Deli</span>
                   </div>
                 </div>
               </div>
             </div>
 
             <div className="mt-6 pt-3 border-t border-slate-800 text-[11px] text-slate-400 font-medium flex justify-between items-center">
-              <span>Carbon mitigation offsets active</span>
+              <span>Reduksi karbon aktif</span>
               <span className="text-emerald-400 font-bold flex items-center gap-1">
-                ● LIVE ACCURATE
+                ● SINKRON AKTIF
               </span>
             </div>
           </div>
@@ -578,13 +579,13 @@ export default function App() {
           {/* Bento Widget 3: Loss Risk by Dept (col-span-4) */}
           <div className="md:col-span-6 lg:col-span-4 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col justify-between min-h-[220px]">
             <div>
-              <h3 className="font-bold text-slate-800 text-xs uppercase tracking-wider mb-3">Loss Risk by Dept</h3>
+              <h3 className="font-bold text-slate-800 text-xs uppercase tracking-wider mb-3">Risiko Kerugian per Departemen</h3>
               <div className="space-y-3">
                 {[
-                  { name: "Produce", color: "bg-red-500", risk: getDeptRisk("Produce") || 22 },
-                  { name: "Meat & Seafood", color: "bg-rose-500", risk: getDeptRisk("Meat & Seafood") || 15 },
-                  { name: "Dairy", color: "bg-orange-500", risk: getDeptRisk("Dairy") || 10 },
-                  { name: "Bakery", color: "bg-amber-500", risk: getDeptRisk("Bakery") || 5 },
+                  { name: "Sayuran & Buah", color: "bg-red-500", risk: getDeptRisk("Produce") || 22 },
+                  { name: "Daging & Makanan Laut", color: "bg-rose-500", risk: getDeptRisk("Meat & Seafood") || 15 },
+                  { name: "Susu & Olahannya", color: "bg-orange-500", risk: getDeptRisk("Dairy") || 10 },
+                  { name: "Roti & Kue", color: "bg-amber-500", risk: getDeptRisk("Bakery") || 5 },
                 ].map((dept) => (
                   <div key={dept.name} className="space-y-1">
                     <div className="flex justify-between items-center text-xs">
@@ -599,7 +600,7 @@ export default function App() {
               </div>
             </div>
             <div className="text-[10px] font-semibold text-slate-400 pt-2 border-t border-slate-50 mt-2">
-              Based on active SKU days-to-expire metrics
+              Berdasarkan sisa masa kedaluwarsa stok aktif
             </div>
           </div>
 
@@ -607,31 +608,31 @@ export default function App() {
           <div className="md:col-span-6 lg:col-span-8 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 min-h-[100px]">
             <div className="flex-1 grid grid-cols-3 gap-3">
               <div className="border-r border-slate-100 pr-3">
-                <span className="text-slate-400 text-[9px] font-bold uppercase tracking-wider block">Stock Turn Rate</span>
+                <span className="text-slate-400 text-[9px] font-bold uppercase tracking-wider block">Perputaran Stok</span>
                 <span className="text-lg font-mono font-black text-slate-800 block mt-0.5">{stockTurnRatio}x</span>
-                <span className="text-[9px] text-emerald-600 font-semibold block">Velo Index: Ideal</span>
+                <span className="text-[9px] text-emerald-600 font-semibold block">Indeks Kecepatan: Ideal</span>
               </div>
               <div className="border-r border-slate-100 px-3">
-                <span className="text-slate-400 text-[9px] font-bold uppercase tracking-wider block">Waste Mitigated</span>
+                <span className="text-slate-400 text-[9px] font-bold uppercase tracking-wider block">Limbah Dikurangi</span>
                 <span className="text-lg font-mono font-black text-slate-800 block mt-0.5">-{((totalSalvagedValue / Math.max(1, lossRiskValue + totalSalvagedValue)) * 100).toFixed(0)}%</span>
-                <span className="text-[9px] text-emerald-600 font-semibold block">Trend: Decreasing</span>
+                <span className="text-[9px] text-emerald-600 font-semibold block">Tren: Menurun</span>
               </div>
               <div className="pl-3">
-                <span className="text-slate-400 text-[9px] font-bold uppercase tracking-wider block">Accuracy Rate</span>
+                <span className="text-slate-400 text-[9px] font-bold uppercase tracking-wider block">Tingkat Akurasi</span>
                 <span className="text-lg font-mono font-black text-slate-800 block mt-0.5">98.4%</span>
-                <span className="text-[9px] text-emerald-600 font-semibold block">Audited RFID Tags</span>
+                <span className="text-[9px] text-emerald-600 font-semibold block">Tag RFID Diaudit</span>
               </div>
             </div>
 
             <div className="flex items-center gap-2 border-t sm:border-t-0 sm:border-l border-slate-100 pt-3 sm:pt-0 sm:pl-4 flex-shrink-0">
-              <div className="flex -space-x-2.5 overflow-hidden">
-                <div className="inline-block h-6 w-6 rounded-full ring-2 ring-white bg-slate-200 text-[9px] font-extrabold flex items-center justify-center text-slate-650" title="Shift Operator">CN</div>
-                <div className="inline-block h-6 w-6 rounded-full ring-2 ring-white bg-emerald-600 text-[9px] font-extrabold flex items-center justify-center text-white" title="Merchandising AI Agent">AI</div>
+               <div className="flex -space-x-2.5 overflow-hidden">
+                <div className="inline-block h-6 w-6 rounded-full ring-2 ring-white bg-slate-200 text-[9px] font-extrabold flex items-center justify-center text-slate-650" title="Operator Shift">CN</div>
+                <div className="inline-block h-6 w-6 rounded-full ring-2 ring-white bg-emerald-600 text-[9px] font-extrabold flex items-center justify-center text-white" title="Agen AI Toko">AI</div>
                 <div className="inline-block h-6 w-6 rounded-full ring-2 ring-white bg-slate-900 text-[9px] font-extrabold flex items-center justify-center text-white" title="Failsafe">FS</div>
               </div>
               <div className="text-[9px] font-bold text-slate-400 leading-none">
-                <span className="block text-slate-600">3 Operators Active</span>
-                <span className="block mt-0.5 text-slate-400">Collaborative Mode</span>
+                <span className="block text-slate-600">3 Operator Aktif</span>
+                <span className="block mt-0.5 text-slate-400">Mode Kolaborasi</span>
               </div>
             </div>
           </div>
@@ -640,7 +641,7 @@ export default function App() {
           <div className="md:col-span-12 lg:col-span-12 grid grid-cols-2 gap-4 min-h-[100px]">
             <button
               onClick={() => {
-                showNotification(`✨ Custom Label Triggered: Successfully generated 12 PDF markdown barcode labels directly for printing.`, "success");
+                showNotification(`✨ Label Kustom Aktif: Berhasil membuat 12 barcode PDF diskon harga untuk langsung dicetak.`, "success");
               }}
               className="bg-white hover:bg-slate-50 border border-slate-200 rounded-2xl p-4 shadow-sm flex flex-col justify-between items-start text-left cursor-pointer transition"
             >
@@ -648,14 +649,14 @@ export default function App() {
                 <Printer className="h-4.5 w-4.5" />
               </div>
               <div>
-                <span className="text-slate-800 font-extrabold text-xs block leading-tight">Print Batch Labels</span>
-                <span className="text-slate-400 text-[9px] font-medium block mt-0.5">Send markdown badges to thermal printer</span>
+                <span className="text-slate-800 font-extrabold text-xs block leading-tight">Cetak Label Batch</span>
+                <span className="text-slate-400 text-[9px] font-medium block mt-0.5">Kirim label diskon ke printer thermal</span>
               </div>
             </button>
 
             <button
               onClick={() => {
-                showNotification(`📞 Contacted 'Feeding Chicago Local Recovery Bank': dispatch driver assigned for today's pickup (Estimated salvage weight: ${(Math.max(12, totalDonatedQty) * 0.45).toFixed(1)} kg).`, "info");
+                showNotification(`📞 Donasi Hubungi 'Lembaga Food Bank Jakarta': Truk penjemputan dikonfirmasi hari ini (Estimasi donasi pangan: ${(Math.max(12, totalDonatedQty) * 0.45).toFixed(1)} kg).`, "info");
               }}
               className="bg-white hover:bg-slate-50 border border-slate-200 rounded-2xl p-4 shadow-sm flex flex-col justify-between items-start text-left cursor-pointer transition"
             >
@@ -663,8 +664,8 @@ export default function App() {
                 <HeartHandshake className="h-4.5 w-4.5" />
               </div>
               <div>
-                <span className="text-slate-800 font-extrabold text-xs block leading-tight">Contact Food Bank</span>
-                <span className="text-slate-400 text-[9px] font-medium block mt-0.5">Arrange direct donor transport recovery</span>
+                <span className="text-slate-800 font-extrabold text-xs block leading-tight">Hubungi Donatur Food Bank</span>
+                <span className="text-slate-400 text-[9px] font-medium block mt-0.5">Atur penjemputan kuror donasi langsung</span>
               </div>
             </button>
           </div>
@@ -680,7 +681,7 @@ export default function App() {
                 : "border-transparent text-slate-500 hover:text-slate-700"
             }`}
           >
-            <CalendarCheck className="h-4.5 w-4.5" /> Shelf Expiration Manager
+            <CalendarCheck className="h-4.5 w-4.5" /> Manajer Kedaluwarsa Rak
           </button>
           <button
             onClick={() => setActiveTab("sustainability")}
@@ -690,7 +691,7 @@ export default function App() {
                 : "border-transparent text-slate-500 hover:text-slate-700"
             }`}
           >
-            <FileSpreadsheet className="h-4.5 w-4.5" /> Environmental & Write-Off Logs
+            <FileSpreadsheet className="h-4.5 w-4.5" /> Log Lingkungan & Penghapusan Barang
           </button>
         </div>
 
@@ -699,7 +700,7 @@ export default function App() {
           <div className="py-24 flex items-center justify-center">
             <div className="flex flex-col items-center gap-3">
               <div className="h-10 w-10 border-4 border-slate-100 border-t-emerald-700 rounded-full animate-spin" />
-              <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">Syncing database layers...</p>
+              <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">Sinkronisasi data basis...</p>
             </div>
           </div>
         ) : (
@@ -710,18 +711,18 @@ export default function App() {
                 <div className="bg-white rounded-xl border border-slate-200/80 p-5 space-y-4">
                   <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center">
                     <div className="flex items-center gap-2">
-                      <Filter className="h-4.5 w-4.5 text-slate-500" />
-                      <h4 className="font-bold text-slate-800 text-sm">Target Catalog Filtering</h4>
+                       <Filter className="h-4.5 w-4.5 text-slate-500" />
+                      <h4 className="font-bold text-slate-800 text-sm">Filter Pencarian Katalog</h4>
                     </div>
 
                     <div className="flex flex-wrap items-center gap-2 text-xs">
-                      <span className="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Filter Expiry Status:</span>
+                      <span className="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Filter Status Kedaluwarsa:</span>
                       {[
-                        { label: "All Items", key: "All" },
-                        { label: "Active Stock", key: "Active" },
-                        { label: "Expiring Soon (0-2d)", key: "Expiring Soon" },
-                        { label: "Marked Down", key: "Discounted" },
-                        { label: "Expired", key: "Expired" }
+                        { label: "Semua Produk", key: "All" },
+                        { label: "Stok Aktif", key: "Active" },
+                        { label: "Hampir Kedaluwarsa (0-2h)", key: "Expiring Soon" },
+                        { label: "Sedang Diskon", key: "Discounted" },
+                        { label: "Kedaluwarsa", key: "Expired" }
                       ].map((item) => (
                         <button
                           key={item.key}
@@ -746,27 +747,38 @@ export default function App() {
                         type="text"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="Search stock by item name or SKU..."
+                        placeholder="Cari produk berdasarkan nama atau SKU..."
                         className="w-full text-xs rounded-xl border border-slate-200 pl-9 pr-3 py-2.5 focus:outline-none focus:border-emerald-500"
                       />
                     </div>
 
                     {/* Category quick buttons */}
                     <div className="relative col-span-2 flex flex-wrap gap-1.5 items-center">
-                      <span className="text-xs text-slate-400 font-semibold p-1">Section:</span>
-                      {["All", "Produce", "Meat & Seafood", "Dairy", "Bakery", "Pantry", "Deli"].map((cat) => (
-                        <button
-                          key={cat}
-                          onClick={() => setFilterCategory(cat)}
-                          className={`text-xs font-bold px-3 py-1.5 rounded-lg border transition-colors cursor-pointer ${
-                            filterCategory === cat
-                              ? "bg-emerald-50 border-emerald-200 text-emerald-800 font-extrabold"
-                              : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
-                          }`}
-                        >
-                          {cat}
-                        </button>
-                      ))}
+                      <span className="text-xs text-slate-400 font-semibold p-1">Departemen:</span>
+                      {["All", "Produce", "Meat & Seafood", "Dairy", "Bakery", "Pantry", "Deli"].map((cat) => {
+                        const categoryLabels: Record<string, string> = {
+                          "All": "Semua",
+                          "Produce": "Sayuran & Buah",
+                          "Meat & Seafood": "Daging & Makanan Laut",
+                          "Dairy": "Susu & Olahannya",
+                          "Bakery": "Roti & Kue",
+                          "Pantry": "Sembako",
+                          "Deli": "Deli & Dapur"
+                        };
+                        return (
+                          <button
+                            key={cat}
+                            onClick={() => setFilterCategory(cat)}
+                            className={`text-xs font-bold px-3 py-1.5 rounded-lg border transition-colors cursor-pointer ${
+                              filterCategory === cat
+                                ? "bg-emerald-50 border-emerald-200 text-emerald-800 font-extrabold"
+                                : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
+                            }`}
+                          >
+                            {categoryLabels[cat] || cat}
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
@@ -778,9 +790,9 @@ export default function App() {
                       <PackageOpen className="h-7 w-7" />
                     </div>
                     <div>
-                      <h4 className="font-extrabold text-slate-800 text-[15px]">No matching stock batches found</h4>
+                      <h4 className="font-extrabold text-slate-800 text-[15px]">Stok produk tidak ditemukan</h4>
                       <p className="text-xs text-slate-400 mt-0.5 max-w-sm font-medium">
-                        Try modifying search syntax or adjust the filter parameters inside the command center.
+                        Silakan periksa kata kunci pencarian Anda atau sesuaikan filter di panel kontrol target.
                       </p>
                     </div>
                   </div>

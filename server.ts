@@ -528,10 +528,19 @@ Provide your decision strictly conforming to the JSON schema.`;
     const bodyText = response.text?.trim() || "";
     const resultObj = JSON.parse(bodyText);
     res.json(resultObj);
-  } catch (error) {
-    console.error("Gemini suggestion error: ", error);
-    // On unexpected API errors, always return a seamless local backup fallback to prevent app crashing
-    const fallbackObj = generateHeuristicFallback();
+  } catch (error: any) {
+    const errorMsg = error?.message || String(error);
+    const isResourceExhausted = errorMsg.includes("RESOURCE_EXHAUSTED") || errorMsg.includes("prepayment credits") || errorMsg.includes("429");
+    
+    if (isResourceExhausted) {
+      console.warn("Gemini API credits are depleted / restricted (429 RESOURCE_EXHAUSTED). Gracefully running local heuristic pricing engine fallback.");
+    } else {
+      console.warn("Gemini suggestion error caught & fallbacked: ", errorMsg);
+    }
+    
+    const fallbackObj = generateHeuristicFallback() as any;
+    fallbackObj.isFallback = true;
+    fallbackObj.fallbackReason = isResourceExhausted ? "prepay_depleted" : "general_error";
     res.json(fallbackObj);
   }
 });

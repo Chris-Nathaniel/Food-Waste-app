@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Sparkles, Calendar, ArrowRight, Check, X, ShieldAlert, CookingPot, TrendingDown } from "lucide-react";
-import { Product, PricingRecommendation } from "../types";
+import { Product, PricingRecommendation, categoryLabels } from "../types";
 import { formatPrice } from "../utils";
 
 interface DiscountRecommendModalProps {
@@ -13,10 +13,10 @@ interface DiscountRecommendModalProps {
 }
 
 const LOADING_PHASES = [
-  "Analyzing category-specific spoilage speeds...",
-  "Calculating merchant salvage margin buffers...",
-  "Estimating local volume clearance velocity...",
-  "Formulating fresh deli-kitchen alternative recipes..."
+  "Menganalisis kecepatan pembusukan spesifik kategori...",
+  "Menghitung penyangga margin penyelamatan toko...",
+  "Mengestimasi kecepatan penjualan volume lokal...",
+  "Merumuskan resep alternatif dapur deli sirkular..."
 ];
 
 export default function DiscountRecommendModal({
@@ -98,33 +98,33 @@ export default function DiscountRecommendModal({
 
       const categoryRepurposing: Record<string, { title: string; description: string; deliUpsellTitle: string }> = {
         "Produce": {
-          title: "Deli Smoothie & Soup Prep",
-          description: `Dice and freeze this surplus ${product.name} to serve as base ingredients for stews or smoothies in our food bar section.`,
+          title: "Persiapan Smoothie & Sup Sayur Deli",
+          description: `Potong dadu dan bekukan sisa ${product.name} ini untuk dijadikan bahan dasar kaldu sup atau smoothie sehat di area bar makanan hangat kami.`,
           deliUpsellTitle: "Paket Smoothie ZeroWaste"
         },
         "Meat & Seafood": {
-          title: "Chef slow-roast marinated food",
-          description: `Cook and seasoning the ${product.name} at the supermarket's own food/deli section to salvage inventory.`,
+          title: "Makanan Marinasi Panggang Lambat",
+          description: `Masak dan berikan bumbu khusus pada ${product.name} ini langsung di dapur makanan deli kami untuk menyelamatkan nilai inventaris.`,
           deliUpsellTitle: "Daging Panggang Chef Siap Saji"
         }
       };
 
       const defaultRepurpose = {
-        title: "Flash Clearance Section Placement",
-        description: `Relocate surplus ${product.name} to the quick clearance section close to checkout with premium price badges.`,
+        title: "Penempatan di Rak Obral Kilat",
+        description: `Pindahkan sisa ${product.name} ke rak obral cepat dekat kasir utama dengan hiasan label diskon khusus menarik.`,
         deliUpsellTitle: "Paket Kilat Super Hemat"
       };
 
       const fallbackObj = {
         suggestedDiscount,
         suggestedRetailPrice,
-        reasoning: `Failsafe dynamic discount formulated locally. Calculated a ${suggestedDiscount}% markdown based on proximity to expiration date (${diffDays} days).`,
-        wasteImpactDescription: `Saves ${product.name} from final disposal and offsets high carbon scrap accumulation.`,
+        reasoning: `Diskon dinamis cadangan diformulasikan secara lokal. Menghitung pemotongan eceran sebesar ${suggestedDiscount}% berdasarkan sisa hari kedaluwarsa (${diffDays} hari).`,
+        wasteImpactDescription: `Menyelamatkan ${product.name} dari pembuangan akhir TPA dan mengimbangi akumulasi jejak karbon makanan terbuang.`,
         repurposeIdea: categoryRepurposing[product.category] || defaultRepurpose
       };
 
       setRecommendation(fallbackObj);
-      setError("Operating in Local Failsafe Mode. Price recommendations are estimated locally.");
+      setError("Berjalan dalam Mode Cadangan Lokal. Rekomendasi diestimasi menggunakan algoritma luring.");
     } finally {
       setLoading(false);
     }
@@ -151,8 +151,8 @@ export default function DiscountRecommendModal({
                 <Sparkles className="h-5 w-5 animate-pulse" />
               </div>
               <div>
-                <h3 className="font-sans font-bold text-lg leading-tight">Gemini Price Optimization</h3>
-                <p className="text-xs text-emerald-100/90 font-medium">Dynamic dynamic markdown & kitchen circular repurposed salvage</p>
+                <h3 className="font-sans font-bold text-lg leading-tight">Optimasi Harga Gemini AI</h3>
+                <p className="text-xs text-emerald-100/90 font-medium">Diskon dinamis & pengalihan sirkular dapur deli swalayan</p>
               </div>
             </div>
             <button
@@ -173,27 +173,27 @@ export default function DiscountRecommendModal({
                   <h4 className="font-bold text-slate-800 text-base">{product.name}</h4>
                   <div className="flex items-center gap-3 mt-1.5">
                     <span className="inline-flex items-center gap-1 text-xs text-slate-600 font-medium bg-white px-2 py-0.5 rounded-md border border-slate-200">
-                      Category: <strong className="text-slate-800">{product.category}</strong>
+                      Kategori: <strong className="text-slate-800">{categoryLabels[product.category] || product.category}</strong>
                     </span>
                     <span className="inline-flex items-center gap-1 text-xs text-slate-600 font-medium bg-white px-2 py-0.5 rounded-md border border-slate-200">
-                      Quantity: <strong className="text-slate-800">{product.quantity} {product.unit}</strong>
+                      Jumlah: <strong className="text-slate-800">{product.quantity} {product.unit}</strong>
                     </span>
                   </div>
                 </div>
 
                 <div className="text-right">
-                  <div className="text-xs text-slate-400 font-semibold font-sans">ORIGINAL PRICE</div>
+                  <div className="text-xs text-slate-400 font-semibold font-sans uppercase">Harga Asli</div>
                   <div className="text-lg font-extrabold text-slate-800">{formatPrice(product.unitPrice)}</div>
-                  <div className="text-[10px] font-mono text-slate-400">Wholesale cost: {formatPrice(product.costPrice)}</div>
+                  <div className="text-[10px] font-mono text-slate-400">Harga modal: {formatPrice(product.costPrice)}</div>
                 </div>
               </div>
 
               <div className="mt-3.5 flex items-center justify-between border-t border-slate-150 pt-2.5 text-xs text-slate-500">
                 <span className="flex items-center gap-1.5 font-medium text-amber-700 bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-100">
-                  <Calendar className="h-4 w-4" /> Expiration: {product.expirationDate}
+                  <Calendar className="h-4 w-4" /> Kedaluwarsa: {product.expirationDate}
                 </span>
                 <span className="font-medium text-slate-500">
-                  Margin on Cost: <strong className="text-slate-700 font-semibold">{(((product.unitPrice - product.costPrice) / product.unitPrice) * 100).toFixed(0)}%</strong>
+                  Margin dari Modal: <strong className="text-slate-700 font-semibold">{(((product.unitPrice - product.costPrice) / product.unitPrice) * 100).toFixed(0)}%</strong>
                 </span>
               </div>
             </div>
@@ -203,13 +203,13 @@ export default function DiscountRecommendModal({
               <div className="rounded-xl bg-rose-50 border border-rose-100 p-4 flex gap-3 text-rose-800 text-sm">
                 <ShieldAlert className="h-5 w-5 flex-shrink-0 text-rose-500" />
                 <div className="space-y-1">
-                  <p className="font-bold">Recommendation Error</p>
+                  <p className="font-bold">Galat Rekomendasi</p>
                   <p className="text-xs text-rose-700/90 leading-relaxed">{error}</p>
                   <button
                     onClick={fetchRecommendation}
                     className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-rose-900 border border-rose-200 bg-white px-2.5 py-1 rounded-md shadow-sm hover:bg-rose-50/50"
                   >
-                    Retry Query
+                    Coba Lagi
                   </button>
                 </div>
               </div>
@@ -223,7 +223,7 @@ export default function DiscountRecommendModal({
                   <Sparkles className="h-5 w-5 text-emerald-500 absolute inset-0 m-auto animate-bounce" />
                 </div>
                 <div className="text-center max-w-sm space-y-1">
-                  <p className="text-sm font-bold text-slate-800 animate-pulse">Consulting Gemini retail matrix...</p>
+                  <p className="text-sm font-bold text-slate-800 animate-pulse">Menghubungi matriks ritel Gemini AI...</p>
                   <p className="text-xs text-slate-400 font-medium h-4">{LOADING_PHASES[phaseIndex]}</p>
                 </div>
               </div>
@@ -236,20 +236,34 @@ export default function DiscountRecommendModal({
                 animate={{ opacity: 1 }}
                 className="space-y-6"
               >
+                {recommendation.isFallback && (
+                  <div className="rounded-xl bg-amber-50 border border-amber-200 p-4 flex gap-3 text-amber-950 text-xs">
+                    <ShieldAlert className="h-5 w-5 flex-shrink-0 text-amber-600 mt-0.5" />
+                    <div className="space-y-1">
+                      <p className="font-bold text-amber-800 text-sm">Mode Cadangan Lokal Aktif</p>
+                      <p className="text-amber-700/80 leading-relaxed text-[11px]">
+                        {recommendation.fallbackReason === "prepay_depleted" 
+                          ? "Kuota pembayaran prabayar (prepayment credits) Gemini API pada proyek AI Studio Anda sedang habis. Kami mengaktifkan mesin optimasi heuristik cerdas luring kami secara mulus agar Anda tetap dapat memproses pencegahan sampah makanan dengan rekomendasi diskon akurat."
+                          : "Sistem berjalan dalam mode luring lokal. Rekomendasi harga dihitung menggunakan algoritma heuristik cadangan secara aman."}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
                 {/* Visual markdown comparative ticker */}
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 items-center">
                   <div className="bg-slate-50 rounded-xl border border-slate-150 p-4 text-center">
-                    <span className="text-[10px] font-bold text-slate-400 tracking-wider uppercase">Active unit price</span>
+                    <span className="text-[10px] font-bold text-slate-400 tracking-wider uppercase">Harga Unit Aktif</span>
                     <p className="text-lg font-bold text-slate-400 line-through mt-0.5">{formatPrice(product.unitPrice)}</p>
                   </div>
                   
                   <div className="bg-emerald-50 rounded-xl border border-emerald-150 p-4 text-center">
-                    <span className="text-[10px] font-bold text-emerald-600 tracking-wider uppercase">Suggested Retail</span>
+                    <span className="text-[10px] font-bold text-emerald-600 tracking-wider uppercase">Rekomendasi Eceran</span>
                     <p className="text-2xl font-extrabold text-emerald-800 mt-0.5">{formatPrice(recommendation.suggestedRetailPrice)}</p>
                   </div>
 
                   <div className="bg-amber-550/10 rounded-xl border border-amber-200 p-4 text-center col-span-2 sm:col-span-1 bg-amber-50">
-                    <span className="text-[10px] font-bold text-amber-700 tracking-wider uppercase">Markdown Rate</span>
+                    <span className="text-[10px] font-bold text-amber-700 tracking-wider uppercase">Tingkat Diskon</span>
                     <p className="text-2xl font-extrabold text-amber-800 flex items-center justify-center gap-1 mt-0.5">
                       <TrendingDown className="h-6 w-6 text-amber-600" />
                       {recommendation.suggestedDiscount}%
@@ -259,7 +273,7 @@ export default function DiscountRecommendModal({
 
                 {/* AI Reasoning Section */}
                 <div className="space-y-2">
-                  <span className="text-xs font-bold text-slate-400 upper-case tracking-wider uppercase">Merchandiser Logical Alignment</span>
+                  <span className="text-xs font-bold text-slate-400 tracking-wider uppercase">Penyelarasan Logis Merchandiser</span>
                   <div className="bg-emerald-50/25 border-l-4 border-emerald-600 rounded-r-lg p-4 text-sm text-slate-700 leading-relaxed italic">
                     "{recommendation.reasoning}"
                   </div>
@@ -269,7 +283,7 @@ export default function DiscountRecommendModal({
                 <div className="bg-teal-50/40 border border-teal-100 rounded-xl p-4 flex items-start gap-3">
                   <Sparkles className="h-5 w-5 text-teal-600 flex-shrink-0 mt-0.5" />
                   <div>
-                    <span className="text-xs font-bold text-teal-800 block">Shed-Avoided Climate Metric</span>
+                    <span className="text-xs font-bold text-teal-800 block">Metrik Iklim Terhindar dari Sampah</span>
                     <p className="text-xs text-teal-700 mt-1 leading-normal">{recommendation.wasteImpactDescription}</p>
                   </div>
                 </div>
@@ -281,14 +295,14 @@ export default function DiscountRecommendModal({
                       <CookingPot className="h-5 w-5" />
                     </div>
                     <div>
-                      <h5 className="font-extrabold text-indigo-900 text-sm">Circular Repurposing Strategy</h5>
-                      <span className="text-[10px] font-medium text-indigo-500 uppercase tracking-wider">Supermarket Internal Kitchen Action</span>
+                      <h5 className="font-extrabold text-indigo-900 text-sm">Strategi Alih Fungsi Sirkular</h5>
+                      <span className="text-[10px] font-medium text-indigo-500 uppercase tracking-wider">Tindakan Dapur Internal Swalayan</span>
                     </div>
                   </div>
 
                   <div className="bg-white rounded-xl border border-indigo-50 p-4 shadow-sm space-y-2">
                     <div className="flex justify-between items-center bg-indigo-550/10 text-indigo-800 px-3 py-1.5 rounded-lg text-xs font-bold bg-indigo-50">
-                      <span>Upsell Menu Item:</span>
+                      <span>Rekomendasi Item Menu Dapur:</span>
                       <span className="underline decoration-indigo-300 font-mono text-[11px]">{recommendation.repurposeIdea.deliUpsellTitle}</span>
                     </div>
                     <p className="text-xs text-slate-600 leading-relaxed pt-1">
@@ -306,7 +320,7 @@ export default function DiscountRecommendModal({
               onClick={onClose}
               className="text-xs bg-slate-200 text-slate-700 px-4 py-2.5 rounded-xl font-bold hover:bg-slate-300 transition-colors"
             >
-              Close Window
+              Tutup
             </button>
 
             {recommendation && !loading && (
@@ -315,13 +329,13 @@ export default function DiscountRecommendModal({
                   onClick={() => {
                     const quantityToRepurpose = product.quantity;
                     const lossDiverted = Number((product.quantity * product.costPrice).toFixed(2));
-                    const writeOffComment = `AI Deli Recipe Activated: converted product physically into '${recommendation.repurposeIdea.deliUpsellTitle}' to reclaim original value.`;
+                    const writeOffComment = `Resep Deli AI Diaktifkan: mengubah produk ini secara fisik menjadi '${recommendation.repurposeIdea.deliUpsellTitle}' untuk memulihkan nilai aset.`;
                     onRepurposed(product.id, quantityToRepurpose, "Deli Repurposed", writeOffComment, lossDiverted);
                     onClose();
                   }}
                   className="inline-flex items-center gap-1.5 text-xs bg-indigo-650 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-xl font-bold font-sans shadow-sm transition-colors cursor-pointer bg-indigo-600"
                 >
-                  <CookingPot className="h-4 w-4" /> Transfer to Kitchen
+                  <CookingPot className="h-4 w-4" /> Alihkan ke Dapur Deli
                 </button>
                 <button
                   type="button"
@@ -330,13 +344,13 @@ export default function DiscountRecommendModal({
                       product.id,
                       recommendation.suggestedDiscount,
                       recommendation.suggestedRetailPrice,
-                      `AI Price Discount Applied: pricing adjusted by ${recommendation.suggestedDiscount}% markdown of ${formatPrice(recommendation.suggestedRetailPrice)} to avoid shelf dump.`
+                      `Diskon Harga AI Diterapkan: penyesuaian harga sebesar ${recommendation.suggestedDiscount}% markdown menjadi ${formatPrice(recommendation.suggestedRetailPrice)} untuk menghindari pembuangan.`
                     );
                     onClose();
                   }}
                   className="inline-flex items-center gap-1.5 text-xs bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-xl font-bold font-sans shadow-md transition-colors cursor-pointer"
                 >
-                  <Check className="h-4 w-4" /> Enforce {recommendation.suggestedDiscount}% Markdown
+                  <Check className="h-4 w-4" /> Terapkan Diskon {recommendation.suggestedDiscount}%
                 </button>
               </div>
             )}
