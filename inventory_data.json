@@ -1,0 +1,187 @@
+[
+  {
+    "id": "prod-001",
+    "sku": "DY-TELUR-01",
+    "name": "Telur",
+    "category": "Dairy",
+    "quantity": 50,
+    "unit": "10-butir",
+    "unitPrice": 28000,
+    "costPrice": 21000,
+    "expirationDate": "2026-06-22",
+    "status": "Active",
+    "appliedDiscount": 0,
+    "history": [
+      {
+        "timestamp": "2026-06-13T20:54:00.000Z",
+        "action": "Stocked",
+        "comment": "Suhu terkendali diletakkan di rak chiller"
+      }
+    ]
+  },
+  {
+    "id": "prod-002",
+    "sku": "MT-AYAM-02",
+    "name": "Ayam",
+    "category": "Meat & Seafood",
+    "quantity": 24,
+    "unit": "kg",
+    "unitPrice": 55000,
+    "costPrice": 41000,
+    "expirationDate": "2026-06-14",
+    "status": "Active",
+    "appliedDiscount": 0,
+    "history": [
+      {
+        "timestamp": "2026-06-13T20:54:00.000Z",
+        "action": "Stocked",
+        "comment": "Diterima dingin dari supplier lokal"
+      }
+    ]
+  },
+  {
+    "id": "prod-003",
+    "sku": "MT-DSAPI-03",
+    "name": "Daging Sapi",
+    "category": "Meat & Seafood",
+    "quantity": 15,
+    "unit": "kg",
+    "unitPrice": 145000,
+    "costPrice": 108000,
+    "expirationDate": "2026-06-15",
+    "status": "Active",
+    "appliedDiscount": 0,
+    "history": [
+      {
+        "timestamp": "2026-06-13T20:54:00.000Z",
+        "action": "Stocked",
+        "comment": "Potongan porsi segar diletakkan di freezer utama"
+      }
+    ]
+  },
+  {
+    "id": "prod-004",
+    "sku": "MT-DBABI-04",
+    "name": "Daging Babi",
+    "category": "Meat & Seafood",
+    "quantity": 12,
+    "unit": "kg",
+    "unitPrice": 110000,
+    "costPrice": 82000,
+    "expirationDate": "2026-06-15",
+    "status": "Active",
+    "appliedDiscount": 0,
+    "history": [
+      {
+        "timestamp": "2026-06-13T20:54:00.000Z",
+        "action": "Stocked",
+        "comment": "Segar dari pemotongan suhu dingin"
+      }
+    ]
+  },
+  {
+    "id": "prod-005",
+    "sku": "MT-UDANG-05",
+    "name": "Udang",
+    "category": "Meat & Seafood",
+    "quantity": 18,
+    "unit": "kg",
+    "unitPrice": 120000,
+    "costPrice": 90000,
+    "expirationDate": "2026-06-12",
+    "status": "Expired",
+    "appliedDiscount": 0,
+    "history": [
+      {
+        "timestamp": "2026-06-13T20:54:00.000Z",
+        "action": "Stocked",
+        "comment": "Udang laut segar dibekukan cepat"
+      },
+      {
+        "timestamp": "2026-06-13T20:54:30.000Z",
+        "action": "Expired",
+        "comment": "System marked expired automatically based on date."
+      }
+    ]
+  },
+  {
+    "id": "prod-006",
+    "sku": "DL-BAKSO-06",
+    "name": "Bakso",
+    "category": "Deli",
+    "quantity": 35,
+    "unit": "bungkus_500g",
+    "unitPrice": 25000,
+    "costPrice": 18000,
+    "expirationDate": "2026-06-17",
+    "status": "Active",
+    "appliedDiscount": 0,
+    "history": [
+      {
+        "timestamp": "2026-06-13T20:54:00.000Z",
+        "action": "Stocked",
+        "comment": "Bakso instan dalam kemasan kedap udara"
+      }
+    ]
+  },
+  {
+    "id": "prod-007",
+    "sku": "DY-SUHT-07",
+    "name": "Susu UHT",
+    "category": "Dairy",
+    "quantity": 40,
+    "unit": "botol_1L",
+    "unitPrice": 19000,
+    "costPrice": 14000,
+    "expirationDate": "2026-06-21",
+    "status": "Active",
+    "appliedDiscount": 0,
+    "history": [
+      {
+        "timestamp": "2026-06-13T20:54:00.000Z",
+        "action": "Stocked",
+        "comment": "Susu karton steril suhu ruangan"
+      }
+    ]
+  },
+  {
+    "id": "prod-008",
+    "sku": "DY-KEJU-08",
+    "name": "Keju",
+    "category": "Dairy",
+    "quantity": 30,
+    "unit": "blok_165g",
+    "unitPrice": 22000,
+    "costPrice": 16000,
+    "expirationDate": "2026-07-28",
+    "status": "Active",
+    "appliedDiscount": 0,
+    "history": [
+      {
+        "timestamp": "2026-06-13T20:54:00.000Z",
+        "action": "Stocked",
+        "comment": "Keju blok olahan disimpan di chiller"
+      }
+    ]
+  },
+  {
+    "id": "prod-009",
+    "sku": "DY-YOGUR-09",
+    "name": "Yogurt",
+    "category": "Dairy",
+    "quantity": 60,
+    "unit": "cup",
+    "unitPrice": 10500,
+    "costPrice": 7800,
+    "expirationDate": "2026-06-28",
+    "status": "Active",
+    "appliedDiscount": 0,
+    "history": [
+      {
+        "timestamp": "2026-06-13T20:54:00.000Z",
+        "action": "Stocked",
+        "comment": "Yoghurt probiotik segar siap saji"
+      }
+    ]
+  }
+]
