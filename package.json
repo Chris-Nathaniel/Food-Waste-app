@@ -1,0 +1,13 @@
+{
+  "name": "food-waste",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev:full": "concurrently -k -n frontend,backend -c blue,green \"npm:dev --prefix frontend\" \"npm:dev --prefix backend\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0"
+  }
+}
+

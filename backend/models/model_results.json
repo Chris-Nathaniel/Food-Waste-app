@@ -1,0 +1,32 @@
+{
+    "demand": {
+        "train_rmse": 8.55127107864947,
+        "test_rmse": 27.561485773573146,
+        "train_mae": 6.964838027954102,
+        "test_mae": 22.803808212280273,
+        "train_r2": 0.9178680777549744,
+        "test_r2": 0.16200417280197144
+    },
+    "risk": {
+        "train_accuracy": 1.0,
+        "test_accuracy": 0.77,
+        "classification_report": "              precision    recall  f1-score   support\n\n         LOW       0.66      0.55      0.60        49\n      MEDIUM       0.82      0.86      0.84       139\n        HIGH       0.57      0.67      0.62        12\n\n    accuracy                           0.77       200\n   macro avg       0.68      0.69      0.68       200\nweighted avg       0.77      0.77      0.77       200\n",
+        "confusion_matrix": [
+            [
+                27,
+                22,
+                0
+            ],
+            [
+                14,
+                119,
+                6
+            ],
+            [
+                0,
+                4,
+                8
+            ]
+        ]
+    }
+}
