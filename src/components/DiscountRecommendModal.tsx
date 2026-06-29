@@ -140,7 +140,7 @@ export default function DiscountRecommendModal({
             </div>
             <button
               onClick={onClose}
-              className="rounded-full p-1.5 text-emerald-100 hover:bg-emerald-600/65 transition-colors focus:outline-none"
+              className="rounded-full p-1.5 text-emerald-100 hover:bg-emerald-600/65 transition-colors focus:outline-none cursor-pointer"
             >
               <X className="h-5 w-5" />
             </button>
@@ -190,7 +190,7 @@ export default function DiscountRecommendModal({
                   <p className="text-xs text-rose-700/90 leading-relaxed">{error}</p>
                   <button
                     onClick={fetchRecommendation}
-                    className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-rose-900 border border-rose-200 bg-white px-2.5 py-1 rounded-md shadow-sm hover:bg-rose-50/50"
+                    className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-rose-900 border border-rose-200 bg-white px-2.5 py-1 rounded-md shadow-sm hover:bg-rose-50/50 cursor-pointer"
                   >
                     Retry Query
                   </button>
@@ -287,7 +287,7 @@ export default function DiscountRecommendModal({
           <div className="bg-slate-50 border-t border-slate-100 p-4 px-6 flex flex-wrap gap-2 items-center justify-between">
             <button
               onClick={onClose}
-              className="text-xs bg-slate-200 text-slate-700 px-4 py-2.5 rounded-xl font-bold hover:bg-slate-300 transition-colors"
+              className="text-xs bg-slate-200 text-slate-700 px-4 py-2.5 rounded-xl font-bold hover:bg-slate-300 transition-colors cursor-pointer"
             >
               Close Window
             </button>

@@ -522,7 +522,7 @@ export default function App() {
                 <Check className="h-4.5 w-4.5 text-emerald-600" />
                 <p>{notification.message}</p>
               </div>
-              <button onClick={() => setNotification(null)} className="text-slate-400 hover:text-slate-600">
+              <button onClick={() => setNotification(null)} className="text-slate-400 hover:text-slate-600 cursor-pointer">
                 <X className="h-4 w-4" />
               </button>
             </motion.div>

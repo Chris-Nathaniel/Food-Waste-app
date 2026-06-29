@@ -112,7 +112,7 @@ export default function AddProductModal({ isOpen, onClose, onAdd }: AddProductMo
             </div>
             <button
               onClick={onClose}
-              className="rounded-full p-1 text-emerald-100 hover:bg-emerald-600 transition-colors focus:outline-none"
+              className="rounded-full p-1 text-emerald-100 hover:bg-emerald-600 transition-colors focus:outline-none cursor-pointer"
             >
               <X className="h-5 w-5" />
             </button>
