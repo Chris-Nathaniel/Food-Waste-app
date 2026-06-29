@@ -1,16 +1,1 @@
-[
-  {
-    "id": "log-001",
-    "productId": "prod-005",
-    "sku": "MT-UDANG-05",
-    "productName": "Udang",
-    "category": "Meat & Seafood",
-    "quantity": 3,
-    "unit": "kg",
-    "lossAmount": 270000,
-    "potentialLossSaved": 0,
-    "action": "Discarded",
-    "date": "2026-06-12",
-    "comment": "Bahan pangan laut rusak karena kegagalan freezer penyimpanan chiller utama."
-  }
-]
+[]

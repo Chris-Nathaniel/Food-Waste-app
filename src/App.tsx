@@ -18,14 +18,17 @@ import {
   CalendarCheck,
   X,
   TrendingDown,
-  Printer,
   HeartHandshake,
-  ArrowRight
+  ArrowRight,
+  Trash2,
+  LayoutGrid,
+  List
 } from "lucide-react";
 import { Product, WasteLog, WasteActionType } from "./types";
 import { formatPrice } from "./utils";
 import MetricCard from "./components/MetricCard";
-import ProductCard from "./components/ProductCard";
+import ProductListingTable from "./components/ProductListingTable";
+import ProductCatalogGrid from "./components/ProductCatalogGrid";
 import AddProductModal from "./components/AddProductModal";
 import DiscountRecommendModal from "./components/DiscountRecommendModal";
 import ActionLogModal from "./components/ActionLogModal";
@@ -48,12 +51,28 @@ export default function App() {
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [selectedRecommendProduct, setSelectedRecommendProduct] = useState<Product | null>(null);
   const [selectedActionLogProduct, setSelectedActionLogProduct] = useState<Product | null>(null);
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
 
   // Prompt Notification trigger
   const [notification, setNotification] = useState<{ message: string; type: "success" | "info" } | null>(null);
 
   // System Date Indicator (Dynamic real time clock simulation)
   const [currentTime, setCurrentTime] = useState(new Date());
+
+  // View Mode: 'table' or 'grid' (catalog)
+  const [viewMode, setViewMode] = useState<"table" | "grid">("table");
+
+  // Auto-detect mobile screen to switch viewMode to 'grid'
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setViewMode("grid");
+      }
+    };
+    handleResize(); // Initial check on mount
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -86,6 +105,31 @@ export default function App() {
     } catch (err) {
       console.error(err);
       setErrorMsg("Failed to synchronize with backend database files. Check if Express server is running.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleClearInventory = () => {
+    setShowResetConfirm(true);
+  };
+
+  const executeClearInventory = async () => {
+    setLoading(true);
+    setErrorMsg(null);
+    try {
+      const response = await fetch("/api/inventory/clear", {
+        method: "POST"
+      });
+      if (!response.ok) {
+        throw new Error("Gagal menyetel ulang inventaris.");
+      }
+      const result = await response.json();
+      showNotification(result.message || "Seluruh riwayat berhasil dikosongkan dan stok dikembalikan ke default!");
+      await fetchData();
+    } catch (err) {
+      console.error(err);
+      setErrorMsg("Gagal menyetel ulang katalog inventaris dan riwayat.");
     } finally {
       setLoading(false);
     }
@@ -142,6 +186,33 @@ export default function App() {
     } catch (err) {
       console.error(err);
       alert("Gagal melakukan aksi penyesuaian markdown.");
+    }
+  };
+
+  // Revert Discount Markdown
+  const handleRevertMarkdown = async (productId: string) => {
+    try {
+      const response = await fetch(`/api/inventory/${productId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          appliedDiscount: 0,
+          status: "Active",
+          actionTaken: "Active",
+          actionComment: "Mengembalikan harga dan status ke kondisi normal (Batal Diskon)."
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error("Gagal membatalkan markdown di server.");
+      }
+
+      const updated = await response.json();
+      setInventory((prev) => prev.map((item) => (item.id === productId ? updated : item)));
+      showNotification(`Berhasil mengembalikan harga ${updated.name} ke harga normal.`);
+    } catch (err) {
+      console.error(err);
+      alert("Gagal membatalkan penyesuaian markdown.");
     }
   };
 
@@ -277,6 +348,14 @@ export default function App() {
   // Total salvage recovery from waste logs database
   const totalSalvagedValue = wasteLogs.reduce((total, log) => total + log.potentialLossSaved, 0);
 
+  const totalLossValue = wasteLogs
+    .filter((log) => log.action === "Discarded")
+    .reduce((sum, log) => sum + log.lossAmount, 0);
+
+  const mtdSavingsPercentage = (totalSalvagedValue + totalLossValue) > 0
+    ? (totalSalvagedValue / (totalSalvagedValue + totalLossValue)) * 100
+    : 0;
+
   const totalDonatedQty = wasteLogs
     .filter((log) => log.action === "Donated")
     .reduce((sum, log) => sum + log.quantity, 0);
@@ -341,14 +420,23 @@ export default function App() {
       {/* Top Banner alert notifying user of active fullstack session */}
       <div className="bg-emerald-950 text-emerald-100 px-4 py-2 text-center text-xs font-semibold flex items-center justify-center gap-3 border-b border-emerald-900 shadow-inner">
         <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-        <span>Terhubung langsung dengan Layanan Express & Optimasi Harga Gemini</span>
-        <button
-          onClick={fetchData}
-          className="hover:underline flex items-center gap-1 text-[11px] bg-emerald-900 px-2 py-0.5 rounded-md border border-emerald-800"
-          title="Sinkronkan data"
-        >
-          <RefreshCw className="h-3 w-3" /> Sinkronkan data
-        </button>
+        <span>Terhubung langsung dengan Layanan Express & Algoritma ML Kustom</span>
+        <div className="flex gap-2">
+          <button
+            onClick={fetchData}
+            className="hover:underline flex items-center gap-1 text-[11px] bg-emerald-900 px-2.5 py-1 rounded-md border border-emerald-800 cursor-pointer transition"
+            title="Sinkronkan data"
+          >
+            <RefreshCw className="h-3 w-3" /> Sinkronkan data
+          </button>
+          <button
+            onClick={handleClearInventory}
+            className="hover:underline flex items-center gap-1 text-[11px] bg-rose-850 hover:bg-rose-800 text-white px-2.5 py-1 rounded-md border border-rose-700 cursor-pointer transition bg-rose-900"
+            title="Setel ulang seluruh riwayat transaksi dan kembalikan stok ke default"
+          >
+            <RefreshCw className="h-3 w-3" /> Reset Riwayat & Stok Default
+          </button>
+        </div>
       </div>
 
       {/* Main Core Header App-Bar with Bento Grid Style */}
@@ -359,10 +447,10 @@ export default function App() {
           </div>
           <div>
             <h1 className="text-xl font-extrabold tracking-tight text-slate-900 font-sans">
-              GaragaraUwuhRungkad <span className="text-emerald-605 text-emerald-650 text-emerald-600">UwuAja</span>
+              ZeroWaste <span className="text-emerald-605 text-emerald-650 text-emerald-600">Merchandiser</span>
             </h1>
             <p className="text-xs text-slate-500 font-medium mt-0.5">
-              <span>SelamatkanSebelumMenjadiUwuh</span>
+              <span>Optimalisasi Masa Simpan & Pengurangan Limbah Pangan</span>
             </p>
           </div>
         </div>
@@ -479,6 +567,7 @@ export default function App() {
                         const days = getDaysRemaining(p.expirationDate);
                         const isExpired = days < 0;
                         const isExpiringSoon = days >= 0 && days <= 2;
+                        const isOptimized = p.status === "Discounted" || (p.appliedDiscount !== undefined && p.appliedDiscount > 0);
                         return (
                           <tr key={p.id} className="border-b border-slate-100/60 hover:bg-slate-50/50 transition">
                             <td className="py-3 font-extrabold text-slate-800">{p.name}</td>
@@ -506,12 +595,22 @@ export default function App() {
                               {p.quantity} {p.unit}
                             </td>
                             <td className="py-3 text-right">
-                              <button
-                                onClick={() => setSelectedRecommendProduct(p)}
-                                className="bg-emerald-50 hover:bg-emerald-600 text-emerald-800 hover:text-white px-2.5 py-1 rounded-lg border border-emerald-100 font-extrabold hover:shadow-sm text-[10px] cursor-pointer transition-all"
-                              >
-                                Saran Gemini
-                              </button>
+                              {isOptimized ? (
+                                <button
+                                  onClick={() => handleRevertMarkdown(p.id)}
+                                  className="bg-amber-50 hover:bg-amber-600 text-amber-800 hover:text-white px-2.5 py-1 rounded-lg border border-amber-200 font-extrabold hover:shadow-sm text-[10px] cursor-pointer transition-all"
+                                  title="Kembalikan harga ke normal"
+                                >
+                                  Reset Optimasi
+                                </button>
+                              ) : (
+                                <button
+                                  onClick={() => setSelectedRecommendProduct(p)}
+                                  className="bg-emerald-50 hover:bg-emerald-600 text-emerald-800 hover:text-white px-2.5 py-1 rounded-lg border border-emerald-100 font-extrabold hover:shadow-sm text-[10px] cursor-pointer transition-all"
+                                >
+                                  Optimalkan
+                                </button>
+                              )}
                             </td>
                           </tr>
                         );
@@ -548,7 +647,7 @@ export default function App() {
                   <div className="text-4xl font-black text-slate-50 tracking-tight mt-1 flex items-baseline gap-1.5 font-sans">
                     {formatPrice(totalSalvagedValue)}
                     <span className="text-xs text-emerald-400 font-extrabold bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
-                      +14.2% MTD
+                      {mtdSavingsPercentage > 0 ? `+${mtdSavingsPercentage.toFixed(2)}%` : "0.00%"} MTD
                     </span>
                   </div>
                 </div>
@@ -614,7 +713,9 @@ export default function App() {
               </div>
               <div className="border-r border-slate-100 px-3">
                 <span className="text-slate-400 text-[9px] font-bold uppercase tracking-wider block">Limbah Dikurangi</span>
-                <span className="text-lg font-mono font-black text-slate-800 block mt-0.5">-{((totalSalvagedValue / Math.max(1, lossRiskValue + totalSalvagedValue)) * 100).toFixed(0)}%</span>
+                <span className="text-lg font-mono font-black text-slate-800 block mt-0.5">
+                  {totalSalvagedValue > 0 ? `-${((totalSalvagedValue / Math.max(1, lossRiskValue + totalSalvagedValue)) * 100).toFixed(0)}%` : "0%"}
+                </span>
                 <span className="text-[9px] text-emerald-600 font-semibold block">Tren: Menurun</span>
               </div>
               <div className="pl-3">
@@ -638,22 +739,7 @@ export default function App() {
           </div>
 
           {/* Bento Widget 6: Quick Actions (col-span-12) */}
-          <div className="md:col-span-12 lg:col-span-12 grid grid-cols-2 gap-4 min-h-[100px]">
-            <button
-              onClick={() => {
-                showNotification(`✨ Label Kustom Aktif: Berhasil membuat 12 barcode PDF diskon harga untuk langsung dicetak.`, "success");
-              }}
-              className="bg-white hover:bg-slate-50 border border-slate-200 rounded-2xl p-4 shadow-sm flex flex-col justify-between items-start text-left cursor-pointer transition"
-            >
-              <div className="p-1.5 bg-slate-100 rounded-lg text-slate-605 text-slate-600 border border-slate-200">
-                <Printer className="h-4.5 w-4.5" />
-              </div>
-              <div>
-                <span className="text-slate-800 font-extrabold text-xs block leading-tight">Cetak Label Batch</span>
-                <span className="text-slate-400 text-[9px] font-medium block mt-0.5">Kirim label diskon ke printer thermal</span>
-              </div>
-            </button>
-
+          <div className="md:col-span-12 lg:col-span-12 grid grid-cols-1 gap-4 min-h-[100px]">
             <button
               onClick={() => {
                 showNotification(`📞 Donasi Hubungi 'Lembaga Food Bank Jakarta': Truk penjemputan dikonfirmasi hari ini (Estimasi donasi pangan: ${(Math.max(12, totalDonatedQty) * 0.45).toFixed(1)} kg).`, "info");
@@ -663,7 +749,7 @@ export default function App() {
               <div className="p-1.5 rounded-lg text-rose-600 border border-rose-100 bg-rose-50">
                 <HeartHandshake className="h-4.5 w-4.5" />
               </div>
-              <div>
+              <div className="mt-2">
                 <span className="text-slate-800 font-extrabold text-xs block leading-tight">Hubungi Donatur Food Bank</span>
                 <span className="text-slate-400 text-[9px] font-medium block mt-0.5">Atur penjemputan kuror donasi langsung</span>
               </div>
@@ -708,77 +794,123 @@ export default function App() {
             {activeTab === "catalog" && (
               <div className="space-y-6">
                 {/* Advanced search filter control rail */}
-                <div className="bg-white rounded-xl border border-slate-200/80 p-5 space-y-4">
-                  <div className="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center">
-                    <div className="flex items-center gap-2">
-                       <Filter className="h-4.5 w-4.5 text-slate-500" />
-                      <h4 className="font-bold text-slate-800 text-sm">Filter Pencarian Katalog</h4>
+                <div className="bg-white rounded-2xl border border-slate-200/80 p-5 space-y-5 shadow-sm">
+                  {/* Row 1: Title, Search Input, and View Mode Toggle */}
+                  <div className="flex flex-col lg:flex-row gap-4 justify-between items-start lg:items-center pb-4 border-b border-slate-100">
+                    <div className="flex items-center gap-2.5">
+                      <div className="p-2 bg-slate-50 border border-slate-100 rounded-xl text-slate-600">
+                        <Filter className="h-4 w-4" />
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-slate-800 text-sm">Filter Pencarian Katalog</h4>
+                        <p className="text-[11px] text-slate-400 font-medium">Saring stok berdasarkan kategori, nama, dan sisa masa simpan</p>
+                      </div>
                     </div>
+                    {/* Search and view toggle container */}
+                    <div className="flex items-center gap-2 w-full lg:w-auto">
+                      {/* Search bar input text */}
+                      <div className="relative flex-1 lg:w-80">
+                        <Search className="absolute left-3.5 top-3 h-4 w-4 text-slate-450" />
+                        <input
+                          type="text"
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          placeholder="Cari produk berdasarkan nama atau SKU..."
+                          className="w-full text-xs rounded-xl border border-slate-200 pl-10 pr-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 bg-slate-50/50 hover:bg-slate-50 focus:bg-white transition-all duration-150"
+                        />
+                      </div>
 
-                    <div className="flex flex-wrap items-center gap-2 text-xs">
-                      <span className="text-slate-400 font-semibold uppercase tracking-wider text-[10px]">Filter Status Kedaluwarsa:</span>
-                      {[
-                        { label: "Semua Produk", key: "All" },
-                        { label: "Stok Aktif", key: "Active" },
-                        { label: "Hampir Kedaluwarsa (0-2h)", key: "Expiring Soon" },
-                        { label: "Sedang Diskon", key: "Discounted" },
-                        { label: "Kedaluwarsa", key: "Expired" }
-                      ].map((item) => (
+                      {/* View Mode Switcher */}
+                      <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200/50 shrink-0 select-none">
                         <button
-                          key={item.key}
-                          onClick={() => setFilterStatus(item.key)}
-                          className={`px-3 py-1.5 rounded-lg border font-bold cursor-pointer transition-all ${
-                            filterStatus === item.key
-                              ? "bg-slate-800 text-white border-slate-800"
-                              : "bg-slate-50 hover:bg-slate-100 border-slate-200/60 text-slate-600"
+                          type="button"
+                          onClick={() => setViewMode("table")}
+                          className={`p-1.5 rounded-lg transition-all cursor-pointer ${
+                            viewMode === "table"
+                              ? "bg-white text-emerald-800 shadow-sm border border-slate-200/40"
+                              : "text-slate-500 hover:text-slate-800"
                           }`}
+                          title="Tampilan Tabel"
                         >
-                          {item.label}
+                          <List className="h-4.5 w-4.5" />
                         </button>
-                      ))}
+                        <button
+                          type="button"
+                          onClick={() => setViewMode("grid")}
+                          className={`p-1.5 rounded-lg transition-all cursor-pointer ${
+                            viewMode === "grid"
+                              ? "bg-white text-emerald-800 shadow-sm border border-slate-200/40"
+                              : "text-slate-500 hover:text-slate-800"
+                          }`}
+                          title="Tampilan Katalog"
+                        >
+                          <LayoutGrid className="h-4.5 w-4.5" />
+                        </button>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {/* Search bar input text */}
-                    <div className="relative">
-                      <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
-                      <input
-                        type="text"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="Cari produk berdasarkan nama atau SKU..."
-                        className="w-full text-xs rounded-xl border border-slate-200 pl-9 pr-3 py-2.5 focus:outline-none focus:border-emerald-500"
-                      />
-                    </div>
-
-                    {/* Category quick buttons */}
-                    <div className="relative col-span-2 flex flex-wrap gap-1.5 items-center">
-                      <span className="text-xs text-slate-400 font-semibold p-1">Departemen:</span>
-                      {["All", "Produce", "Meat & Seafood", "Dairy", "Bakery", "Pantry", "Deli"].map((cat) => {
-                        const categoryLabels: Record<string, string> = {
-                          "All": "Semua",
-                          "Produce": "Sayuran & Buah",
-                          "Meat & Seafood": "Daging & Makanan Laut",
-                          "Dairy": "Susu & Olahannya",
-                          "Bakery": "Roti & Kue",
-                          "Pantry": "Sembako",
-                          "Deli": "Deli & Dapur"
-                        };
-                        return (
+                  {/* Row 2: Filter Status and Department Stack */}
+                  <div className="space-y-4">
+                    {/* Status Kedaluwarsa Filter */}
+                    <div className="flex flex-col sm:flex-row gap-2 sm:items-center text-xs">
+                      <span className="text-slate-400 font-extrabold uppercase tracking-wider text-[10px] w-28 shrink-0">
+                        Status Exp:
+                      </span>
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        {[
+                          { label: "Semua Produk", key: "All" },
+                          { label: "Stok Aktif", key: "Active" },
+                          { label: "Hampir Kedaluwarsa (0-2h)", key: "Expiring Soon" },
+                          { label: "Sedang Diskon", key: "Discounted" },
+                          { label: "Kedaluwarsa", key: "Expired" }
+                        ].map((item) => (
                           <button
-                            key={cat}
-                            onClick={() => setFilterCategory(cat)}
-                            className={`text-xs font-bold px-3 py-1.5 rounded-lg border transition-colors cursor-pointer ${
-                              filterCategory === cat
-                                ? "bg-emerald-50 border-emerald-200 text-emerald-800 font-extrabold"
-                                : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
+                            key={item.key}
+                            onClick={() => setFilterStatus(item.key)}
+                            className={`px-3 py-1.5 rounded-lg border font-bold text-xs cursor-pointer transition-all ${
+                              filterStatus === item.key
+                                ? "bg-slate-800 text-white border-slate-800 shadow-sm"
+                                : "bg-white hover:bg-slate-50 border-slate-200 text-slate-600"
                             }`}
                           >
-                            {categoryLabels[cat] || cat}
+                            {item.label}
                           </button>
-                        );
-                      })}
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Departemen Filter */}
+                    <div className="flex flex-col sm:flex-row gap-2 sm:items-center text-xs">
+                      <span className="text-slate-400 font-extrabold uppercase tracking-wider text-[10px] w-28 shrink-0">
+                        Departemen:
+                      </span>
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        {["All", "Produce", "Meat & Seafood", "Dairy", "Bakery", "Pantry", "Deli"].map((cat) => {
+                          const categoryLabels: Record<string, string> = {
+                            "All": "Semua",
+                            "Produce": "Sayuran & Buah",
+                            "Meat & Seafood": "Daging & Makanan Laut",
+                            "Dairy": "Susu & Olahannya",
+                            "Bakery": "Roti & Kue",
+                            "Pantry": "Sembako",
+                            "Deli": "Deli & Dapur"
+                          };
+                          return (
+                            <button
+                              key={cat}
+                              onClick={() => setFilterCategory(cat)}
+                              className={`text-xs font-bold px-3 py-1.5 rounded-lg border transition-all cursor-pointer ${
+                                filterCategory === cat
+                                  ? "bg-emerald-50 border-emerald-250 text-emerald-800 font-extrabold shadow-sm"
+                                  : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
+                              }`}
+                            >
+                              {categoryLabels[cat] || cat}
+                            </button>
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -796,21 +928,26 @@ export default function App() {
                       </p>
                     </div>
                   </div>
+                ) : viewMode === "grid" ? (
+                  <ProductCatalogGrid
+                    products={filteredProducts}
+                    onRecommend={(prod) => setSelectedRecommendProduct(prod)}
+                    onLogAction={(prod) => setSelectedActionLogProduct(prod)}
+                    onMarkSold={(prodId, qty) => {
+                      handleMarkSold(prodId, qty);
+                    }}
+                    onRevertMarkdown={handleRevertMarkdown}
+                  />
                 ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    {filteredProducts.map((product) => (
-                      <ProductCard
-                        key={product.id}
-                        id={`prodcard-${product.id}`}
-                        product={product}
-                        onRecommend={(prod) => setSelectedRecommendProduct(prod)}
-                        onLogAction={(prod) => setSelectedActionLogProduct(prod)}
-                        onMarkSold={(prodId, qty) => {
-                          handleMarkSold(prodId, qty);
-                        }}
-                      />
-                    ))}
-                  </div>
+                  <ProductListingTable
+                    products={filteredProducts}
+                    onRecommend={(prod) => setSelectedRecommendProduct(prod)}
+                    onLogAction={(prod) => setSelectedActionLogProduct(prod)}
+                    onMarkSold={(prodId, qty) => {
+                      handleMarkSold(prodId, qty);
+                    }}
+                    onRevertMarkdown={handleRevertMarkdown}
+                  />
                 )}
               </div>
             )}
@@ -860,6 +997,44 @@ export default function App() {
         onClose={() => setIsAddOpen(false)}
         onAdd={handleAddProduct}
       />
+
+      {/* Reset Confirmation Modal */}
+      {showResetConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-200">
+            <div className="flex items-center gap-3 text-rose-600 mb-4">
+              <div className="p-3 bg-rose-50 rounded-xl">
+                <Trash2 className="h-6 w-6" />
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 font-sans">Konfirmasi Reset</h3>
+            </div>
+            
+            <p className="text-sm text-slate-600 leading-relaxed mb-6 font-sans">
+              Apakah Anda yakin ingin mengosongkan seluruh riwayat transaksi dan mengembalikan stok ke kondisi default? Tindakan ini tidak dapat dibatalkan.
+            </p>
+            
+            <div className="flex gap-3 justify-end font-sans">
+              <button
+                type="button"
+                onClick={() => setShowResetConfirm(false)}
+                className="px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-100 rounded-xl transition cursor-pointer"
+              >
+                Batal
+              </button>
+              <button
+                type="button"
+                onClick={async () => {
+                  setShowResetConfirm(false);
+                  await executeClearInventory();
+                }}
+                className="px-4 py-2 text-sm font-semibold text-white bg-rose-600 hover:bg-rose-700 rounded-xl transition shadow-md hover:shadow-lg active:scale-95 cursor-pointer"
+              >
+                Ya, Reset Sekarang
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

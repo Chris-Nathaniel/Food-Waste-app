@@ -8,12 +8,12 @@
     "unit": "10-butir",
     "unitPrice": 28000,
     "costPrice": 21000,
-    "expirationDate": "2026-06-22",
+    "expirationDate": "2026-07-13",
     "status": "Active",
     "appliedDiscount": 0,
     "history": [
       {
-        "timestamp": "2026-06-13T20:54:00.000Z",
+        "timestamp": "2026-06-29T12:00:00.000Z",
         "action": "Stocked",
         "comment": "Suhu terkendali diletakkan di rak chiller"
       }
@@ -28,12 +28,12 @@
     "unit": "kg",
     "unitPrice": 55000,
     "costPrice": 41000,
-    "expirationDate": "2026-06-14",
+    "expirationDate": "2026-07-04",
     "status": "Active",
     "appliedDiscount": 0,
     "history": [
       {
-        "timestamp": "2026-06-13T20:54:00.000Z",
+        "timestamp": "2026-06-29T12:00:00.000Z",
         "action": "Stocked",
         "comment": "Diterima dingin dari supplier lokal"
       }
@@ -48,12 +48,12 @@
     "unit": "kg",
     "unitPrice": 145000,
     "costPrice": 108000,
-    "expirationDate": "2026-06-15",
+    "expirationDate": "2026-07-07",
     "status": "Active",
     "appliedDiscount": 0,
     "history": [
       {
-        "timestamp": "2026-06-13T20:54:00.000Z",
+        "timestamp": "2026-06-29T12:00:00.000Z",
         "action": "Stocked",
         "comment": "Potongan porsi segar diletakkan di freezer utama"
       }
@@ -68,12 +68,12 @@
     "unit": "kg",
     "unitPrice": 110000,
     "costPrice": 82000,
-    "expirationDate": "2026-06-15",
+    "expirationDate": "2026-07-06",
     "status": "Active",
     "appliedDiscount": 0,
     "history": [
       {
-        "timestamp": "2026-06-13T20:54:00.000Z",
+        "timestamp": "2026-06-29T12:00:00.000Z",
         "action": "Stocked",
         "comment": "Segar dari pemotongan suhu dingin"
       }
@@ -88,19 +88,14 @@
     "unit": "kg",
     "unitPrice": 120000,
     "costPrice": 90000,
-    "expirationDate": "2026-06-12",
-    "status": "Expired",
+    "expirationDate": "2026-07-05",
+    "status": "Active",
     "appliedDiscount": 0,
     "history": [
       {
-        "timestamp": "2026-06-13T20:54:00.000Z",
+        "timestamp": "2026-06-29T12:00:00.000Z",
         "action": "Stocked",
         "comment": "Udang laut segar dibekukan cepat"
-      },
-      {
-        "timestamp": "2026-06-13T20:54:30.000Z",
-        "action": "Expired",
-        "comment": "System marked expired automatically based on date."
       }
     ]
   },
@@ -113,12 +108,12 @@
     "unit": "bungkus_500g",
     "unitPrice": 25000,
     "costPrice": 18000,
-    "expirationDate": "2026-06-17",
+    "expirationDate": "2026-07-09",
     "status": "Active",
     "appliedDiscount": 0,
     "history": [
       {
-        "timestamp": "2026-06-13T20:54:00.000Z",
+        "timestamp": "2026-06-29T12:00:00.000Z",
         "action": "Stocked",
         "comment": "Bakso instan dalam kemasan kedap udara"
       }
@@ -133,12 +128,12 @@
     "unit": "botol_1L",
     "unitPrice": 19000,
     "costPrice": 14000,
-    "expirationDate": "2026-06-21",
+    "expirationDate": "2026-07-14",
     "status": "Active",
     "appliedDiscount": 0,
     "history": [
       {
-        "timestamp": "2026-06-13T20:54:00.000Z",
+        "timestamp": "2026-06-29T12:00:00.000Z",
         "action": "Stocked",
         "comment": "Susu karton steril suhu ruangan"
       }
@@ -153,12 +148,12 @@
     "unit": "blok_165g",
     "unitPrice": 22000,
     "costPrice": 16000,
-    "expirationDate": "2026-07-28",
+    "expirationDate": "2026-08-28",
     "status": "Active",
     "appliedDiscount": 0,
     "history": [
       {
-        "timestamp": "2026-06-13T20:54:00.000Z",
+        "timestamp": "2026-06-29T12:00:00.000Z",
         "action": "Stocked",
         "comment": "Keju blok olahan disimpan di chiller"
       }
@@ -173,12 +168,12 @@
     "unit": "cup",
     "unitPrice": 10500,
     "costPrice": 7800,
-    "expirationDate": "2026-06-28",
+    "expirationDate": "2026-07-20",
     "status": "Active",
     "appliedDiscount": 0,
     "history": [
       {
-        "timestamp": "2026-06-13T20:54:00.000Z",
+        "timestamp": "2026-06-29T12:00:00.000Z",
         "action": "Stocked",
         "comment": "Yoghurt probiotik segar siap saji"
       }

@@ -66,7 +66,7 @@ export default function SustainabilityMetrics({ logs }: SustainabilityMetricsPro
   );
 
   const totalDiverted = stats.donatedQuantity + stats.repurposedQuantity + stats.compostedQuantity;
-  const diversionRate = stats.totalQuantity > 0 ? (totalDiverted / stats.totalQuantity) * 100 : 100;
+  const diversionRate = stats.totalQuantity > 0 ? (totalDiverted / stats.totalQuantity) * 100 : 0;
   
   // Estimation approximations:
   // 1 item donated = 1.2 meals

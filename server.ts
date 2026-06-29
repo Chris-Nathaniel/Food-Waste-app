@@ -45,7 +45,7 @@ const DEFAULT_INVENTORY = [
     unit: "10-butir",
     unitPrice: 28000,
     costPrice: 21000,
-    expirationDate: getRelativeDateStr(9),
+    expirationDate: getRelativeDateStr(14),
     status: "Active",
     appliedDiscount: 0,
     history: [{ timestamp: new Date().toISOString(), action: "Stocked", comment: "Suhu terkendali diletakkan di rak chiller" }],
@@ -59,7 +59,7 @@ const DEFAULT_INVENTORY = [
     unit: "kg",
     unitPrice: 55000,
     costPrice: 41000,
-    expirationDate: getRelativeDateStr(1),
+    expirationDate: getRelativeDateStr(5),
     status: "Active",
     appliedDiscount: 0,
     history: [{ timestamp: new Date().toISOString(), action: "Stocked", comment: "Diterima dingin dari supplier lokal" }],
@@ -73,7 +73,7 @@ const DEFAULT_INVENTORY = [
     unit: "kg",
     unitPrice: 145000,
     costPrice: 108000,
-    expirationDate: getRelativeDateStr(2),
+    expirationDate: getRelativeDateStr(8),
     status: "Active",
     appliedDiscount: 0,
     history: [{ timestamp: new Date().toISOString(), action: "Stocked", comment: "Potongan porsi segar diletakkan di freezer utama" }],
@@ -87,7 +87,7 @@ const DEFAULT_INVENTORY = [
     unit: "kg",
     unitPrice: 110000,
     costPrice: 82000,
-    expirationDate: getRelativeDateStr(2),
+    expirationDate: getRelativeDateStr(7),
     status: "Active",
     appliedDiscount: 0,
     history: [{ timestamp: new Date().toISOString(), action: "Stocked", comment: "Segar dari pemotongan suhu dingin" }],
@@ -101,8 +101,8 @@ const DEFAULT_INVENTORY = [
     unit: "kg",
     unitPrice: 120000,
     costPrice: 90000,
-    expirationDate: getRelativeDateStr(-1),
-    status: "Expired",
+    expirationDate: getRelativeDateStr(6),
+    status: "Active",
     appliedDiscount: 0,
     history: [{ timestamp: new Date().toISOString(), action: "Stocked", comment: "Udang laut segar dibekukan cepat" }],
   },
@@ -115,7 +115,7 @@ const DEFAULT_INVENTORY = [
     unit: "bungkus_500g",
     unitPrice: 25000,
     costPrice: 18000,
-    expirationDate: getRelativeDateStr(4),
+    expirationDate: getRelativeDateStr(10),
     status: "Active",
     appliedDiscount: 0,
     history: [{ timestamp: new Date().toISOString(), action: "Stocked", comment: "Bakso instan dalam kemasan kedap udara" }],
@@ -129,7 +129,7 @@ const DEFAULT_INVENTORY = [
     unit: "botol_1L",
     unitPrice: 19000,
     costPrice: 14000,
-    expirationDate: getRelativeDateStr(8),
+    expirationDate: getRelativeDateStr(15),
     status: "Active",
     appliedDiscount: 0,
     history: [{ timestamp: new Date().toISOString(), action: "Stocked", comment: "Susu karton steril suhu ruangan" }],
@@ -143,7 +143,7 @@ const DEFAULT_INVENTORY = [
     unit: "blok_165g",
     unitPrice: 22000,
     costPrice: 16000,
-    expirationDate: getRelativeDateStr(45),
+    expirationDate: getRelativeDateStr(60),
     status: "Active",
     appliedDiscount: 0,
     history: [{ timestamp: new Date().toISOString(), action: "Stocked", comment: "Keju blok olahan disimpan di chiller" }],
@@ -157,29 +157,14 @@ const DEFAULT_INVENTORY = [
     unit: "cup",
     unitPrice: 10500,
     costPrice: 7800,
-    expirationDate: getRelativeDateStr(15),
+    expirationDate: getRelativeDateStr(21),
     status: "Active",
     appliedDiscount: 0,
     history: [{ timestamp: new Date().toISOString(), action: "Stocked", comment: "Yoghurt probiotik segar siap saji" }],
   },
 ];
 
-const DEFAULT_WASTE_LOGS = [
-  {
-    id: "log-001",
-    productId: "prod-005",
-    sku: "MT-UDANG-05",
-    productName: "Udang",
-    category: "Meat & Seafood",
-    quantity: 3,
-    unit: "kg",
-    lossAmount: 270000,
-    potentialLossSaved: 0,
-    action: "Discarded",
-    date: getRelativeDateStr(-1),
-    comment: "Bahan pangan laut rusak karena kegagalan freezer penyimpanan chiller utama.",
-  },
-];
+const DEFAULT_WASTE_LOGS: any[] = [];
 
 // Read File Database helpers
 function readInventory(): any[] {
@@ -189,6 +174,9 @@ function readInventory(): any[] {
       return DEFAULT_INVENTORY;
     }
     const data = fs.readFileSync(DATA_FILE, "utf-8");
+    if (!data.trim()) {
+      return [];
+    }
     const parsed = JSON.parse(data);
     
     // Automatically flag past-due items to expired status if active
@@ -213,7 +201,7 @@ function readInventory(): any[] {
     return updated;
   } catch (error) {
     console.error("Error reading inventory file: ", error);
-    return DEFAULT_INVENTORY;
+    return [];
   }
 }
 
@@ -232,10 +220,13 @@ function readWasteLogs(): any[] {
       return DEFAULT_WASTE_LOGS;
     }
     const data = fs.readFileSync(WASTE_LOG_FILE, "utf-8");
+    if (!data.trim()) {
+      return [];
+    }
     return JSON.parse(data);
   } catch (error) {
     console.error("Error reading waste logs: ", error);
-    return DEFAULT_WASTE_LOGS;
+    return [];
   }
 }
 
@@ -321,6 +312,33 @@ app.put("/api/inventory/:id", (req, res) => {
   items[index] = updatedItem;
   writeInventory(items);
   res.json(updatedItem);
+});
+
+app.post("/api/inventory/reset", (req, res) => {
+  const freshInventory = DEFAULT_INVENTORY.map(item => ({
+    ...item,
+    history: item.history.map(hist => ({
+      ...hist,
+      timestamp: new Date().toISOString()
+    }))
+  }));
+
+  writeInventory(freshInventory);
+  writeWasteLogs(DEFAULT_WASTE_LOGS);
+
+  res.json({ success: true, message: "Katalog inventaris berhasil diperbarui dan diisi ulang ke kondisi awal segar!" });
+});
+
+app.post("/api/inventory/clear", (req, res) => {
+  const freshInventory = DEFAULT_INVENTORY.map(item => ({
+    ...item,
+    history: []
+  }));
+
+  writeInventory(freshInventory);
+  writeWasteLogs([]); // Clear global history
+
+  res.json({ success: true, message: "Seluruh riwayat transaksi telah dikosongkan dan stok dikembalikan ke kondisi default!" });
 });
 
 app.delete("/api/inventory/:id", (req, res) => {
